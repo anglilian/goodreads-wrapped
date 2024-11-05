@@ -3,25 +3,52 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --color-primary: #372212;
+  --color-primary-button: #03635d;
+  --color-secondary: #b55341;
+  --color-secondary-button: #b7ad98;
+  --color-rating: #e87402;
+  --color-background: #f4f1ea;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer base {
+  h1 {
+    @apply font-merriweather text-6xl font-bold text-secondary;
+  }
+
+  h2 {
+    @apply font-merriweather text-2xl font-bold text-primary;
+  }
+
+  h3 {
+    @apply font-lato text-5xl font-bold text-primary;
+  }
+
+  h4 {
+    @apply font-lato text-2xl font-bold text-primary;
+  }
+
+  p {
+    @apply font-lato text-base text-primary;
+  }
+
+  a {
+    @apply font-lato text-base text-primary-button hover:underline;
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+@layer components {
+  .btn-primary {
+    @apply bg-primary-button text-white px-4 py-2 rounded font-lato text-base
+    hover:opacity-90 transition-opacity
+    focus:outline-none focus:ring-2 focus:ring-primary-button focus:ring-opacity-50
+    disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary-button text-primary px-4 py-2 rounded font-lato text-base
+    hover:opacity-90 transition-opacity
+    focus:outline-none focus:ring-2 focus:ring-secondary-button focus:ring-opacity-50
+    disabled:opacity-50 disabled:cursor-not-allowed;
+  }
 }

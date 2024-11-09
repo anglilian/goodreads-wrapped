@@ -11,6 +11,11 @@ const cleanISBN = (isbn: string): string => {
   return isbn.replace(/^=?"?|"?$/g, "").trim();
 };
 
+const isThisYear = (date: Date): boolean => {
+  const currentYear = new Date().getFullYear();
+  return date.getFullYear() === currentYear;
+};
+
 export function BookDataProvider({
   children,
 }: {
@@ -27,6 +32,7 @@ export function BookDataProvider({
 
     try {
       const initialProcessedBooks = rawBooks.map((book) => {
+        const dateRead = new Date(book["Date Read"]);
         const cleanedISBN = book.ISBN ? cleanISBN(book.ISBN) : null;
 
         return {
@@ -39,13 +45,17 @@ export function BookDataProvider({
           numPages: book["Number of Pages"]
             ? parseInt(book["Number of Pages"]) || undefined
             : undefined,
-          dateRead: new Date(book["Date Read"]),
+          dateRead: dateRead,
         };
       });
 
       // Filter books that need ISBN fetching
       const booksNeedingISBN = initialProcessedBooks
-        .filter((book) => !book.isbn)
+        .filter(
+          (book) =>
+            isThisYear(book.dateRead) && // Only process books from this year
+            (!book.isbn || book.isbn.length < 10)
+        )
         .map((book) => ({
           title: book.title,
           author: book.author,

@@ -14,11 +14,7 @@ export default function WelcomePage() {
 
   useEffect(() => {
     if (!isLoading && books.length > 0) {
-      const timeout = setTimeout(() => {
-        router.push("/start");
-      }, 1500); // 1.5 seconds delay
-
-      return () => clearTimeout(timeout);
+      router.push("/start");
     }
   }, [books.length, isLoading, router]);
 

@@ -10,21 +10,30 @@ export interface RawBook {
 
 export interface Book {
   isbn: string;
-  rating?: number; // Converted from string to number
+  rating?: number;
   title: string;
   author: string;
-  numPages?: number; // Converted from string to number
-  dateRead: Date; // Converted from string to Date
-  coverUrl?: string; // Added by useFetchBookCoverUrl
+  numPages?: number;
+  dateRead: Date;
+  coverUrl?: string;
 }
 
-export interface BookAnalytics {
-  ratingCounts: {
-    [rating: number]: number;
-  };
-  topRatedBooks?: Book[];
-  totalBooks: number;
-  totalPages: number;
-  topGenre?: string;
-  topGenreBooks?: Book[];
+// export interface BookAnalytics {
+//   ratingCounts: {
+//     [rating: number]: number;
+//   };
+//   topRatedBooks?: Book[];
+//   totalBooks: number;
+//   totalPages: number;
+//   topGenre?: string;
+//   topGenreBooks?: Book[];
+//   totalBooksPrevious: number;
+//   booksRead: Book[];
+// }
+
+export interface BookDataContextType {
+  books: Book[];
+  isLoading: boolean;
+  error: string | null;
+  processBooks: (rawBooks: RawBook[]) => void;
 }

@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import { Lato, Merriweather } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/context/BookDataContext";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -30,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${lato.variable} ${merriweather.variable} font-lato bg-background`}
       >
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

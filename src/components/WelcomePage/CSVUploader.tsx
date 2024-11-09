@@ -2,12 +2,12 @@
 
 import { Upload } from "lucide-react";
 import Papa from "papaparse";
-import { Book, RawBook } from "@/types/books";
+import { RawBook } from "@/types/books";
 import { useBookData } from "@/hooks/useBookData";
 import { useState } from "react";
 
 export default function CSVUploader() {
-  const { handleBooks } = useBookData();
+  const { processBooks, isLoading, error: contextError } = useBookData();
   const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +51,7 @@ export default function CSVUploader() {
         }
 
         // Parse was successful, pass the data to handleBooks
-        handleBooks(results.data as RawBook[]);
+        processBooks(results.data as RawBook[]);
       },
       error: (error) => {
         setError(`Error parsing CSV: ${error.message}`);
@@ -74,21 +74,9 @@ export default function CSVUploader() {
         />
       </label>
 
-      {error && (
+      {(error || contextError) && (
         <div className="p-4 mt-4 text-red-800 bg-red-50 border border-red-200 rounded-lg">
           <p>{error}</p>
-          {error.includes("Missing required columns") && (
-            <div className="mt-2">
-              <a
-                href="https://help.goodreads.com/s/article/How-do-I-import-or-export-my-books-1553870934590"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-red-800 underline hover:text-red-900"
-              >
-                Need help?
-              </a>
-            </div>
-          )}
         </div>
       )}
     </div>

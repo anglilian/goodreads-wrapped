@@ -1,10 +1,15 @@
 "use client";
 import { createContext, useState, ReactNode } from "react";
 import { BookDataContextType, Book, RawBook } from "@/types/books";
+import { useFetchISBN } from "@/hooks/useFetchISBN";
 
 export const BookDataContext = createContext<BookDataContextType | undefined>(
   undefined
 );
+
+const cleanISBN = (isbn: string): string => {
+  return isbn.replace(/^=?"?|"?$/g, "").trim();
+};
 
 export function BookDataProvider({
   children,
@@ -14,26 +19,66 @@ export function BookDataProvider({
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { fetchMultipleISBNs } = useFetchISBN();
 
-  const processBooks = (rawBooks: RawBook[]) => {
+  const processBooks = async (rawBooks: RawBook[]) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const processedBooks = rawBooks.map((book) => ({
-        isbn: book.ISBN,
-        rating: book["My Rating"]
-          ? parseInt(book["My Rating"]) || undefined
-          : undefined,
-        title: book.Title,
-        author: book.Author,
-        numPages: book["Number of Pages"]
-          ? parseInt(book["Number of Pages"]) || undefined
-          : undefined,
-        dateRead: new Date(book["Date Read"]),
-      }));
+      const initialProcessedBooks = rawBooks.map((book) => {
+        const cleanedISBN = book.ISBN ? cleanISBN(book.ISBN) : null;
 
-      setBooks(processedBooks);
+        return {
+          isbn: cleanedISBN ? cleanedISBN : "",
+          rating: book["My Rating"]
+            ? parseInt(book["My Rating"]) || undefined
+            : undefined,
+          title: book.Title,
+          author: book.Author,
+          numPages: book["Number of Pages"]
+            ? parseInt(book["Number of Pages"]) || undefined
+            : undefined,
+          dateRead: new Date(book["Date Read"]),
+        };
+      });
+
+      // Filter books that need ISBN fetching
+      const booksNeedingISBN = initialProcessedBooks
+        .filter((book) => !book.isbn)
+        .map((book) => ({
+          title: book.title,
+          author: book.author,
+        }));
+
+      // If there are books needing ISBN, fetch them
+      if (booksNeedingISBN.length > 0) {
+        const fetchedISBNs = await fetchMultipleISBNs(booksNeedingISBN);
+
+        // Create a map of title+author to ISBN for easy lookup
+        const isbnMap = new Map(
+          fetchedISBNs.map((book) => [
+            `${book.title}-${book.author}`,
+            book.isbn,
+          ])
+        );
+
+        // Update the processed books with fetched ISBNs
+        const finalProcessedBooks = initialProcessedBooks.map((book) => {
+          if (!book.isbn) {
+            const fetchedISBN = isbnMap.get(`${book.title}-${book.author}`);
+            return {
+              ...book,
+              isbn: fetchedISBN || "", // Use fetched ISBN or empty string if not found
+            };
+          }
+          return book;
+        });
+        setBooks(finalProcessedBooks);
+      } else {
+        // If no books need ISBN fetching, use the initial processing
+        setBooks(initialProcessedBooks);
+      }
     } catch (err) {
       setError("Error processing books data");
       console.error(err);

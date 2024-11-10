@@ -128,7 +128,6 @@ export function BookDataProvider({
   };
 
   return (
-    // Make sure there's a return statement here
     <BookDataContext.Provider
       value={{
         books,

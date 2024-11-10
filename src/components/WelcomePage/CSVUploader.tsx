@@ -46,7 +46,11 @@ export default function CSVUploader() {
         );
 
         if (missingCols.length > 0) {
-          setError(`Missing required columns: ${missingCols.join(", ")}`);
+          setError(
+            `Missing required columns: ${missingCols.join(
+              ", "
+            )}. Do not edit the CSV downloaded from Goodreads.`
+          );
           return;
         }
 
@@ -60,7 +64,7 @@ export default function CSVUploader() {
   };
 
   return (
-    <div className="space-y-4 lg:max-w-96">
+    <div className="space-y-4 lg:max-w-80">
       <label className="flex flex-col items-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-button transition-colors">
         <Upload className="w-8 h-8 text-gray-400" />
         <span className="text-sm text-gray-600">

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Lato, Merriweather } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/context/BookDataContext";
+import Footer from "@/components/ui/Footer";
 
 const lato = Lato({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
         className={`${lato.variable} ${merriweather.variable} font-lato bg-background`}
       >
         <Providers>{children}</Providers>
+        <Footer />
       </body>
     </html>
   );

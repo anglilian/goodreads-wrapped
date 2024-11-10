@@ -16,7 +16,7 @@ export default function Loader() {
       setTextIndex((prevIndex) =>
         prevIndex === loadingTexts.length - 1 ? 0 : prevIndex + 1
       );
-    }, 10000);
+    }, 10000); // every 10 secs
 
     // Cleanup interval on component unmount
     return () => clearInterval(intervalId);

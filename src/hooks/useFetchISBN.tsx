@@ -1,15 +1,8 @@
 import { useState, useCallback } from "react";
+import { GoogleBooksResponse } from "@/types/api_response";
+import { Book } from "@/types/books";
 
-interface GoogleBooksResponse {
-  items?: Array<{
-    volumeInfo?: {
-      industryIdentifiers?: Array<{
-        type: string;
-        identifier: string;
-      }>;
-    };
-  }>;
-}
+type PartialBook = Pick<Book, "isbn" | "coverUrl">;
 
 const RETRY_DELAY = 2000; // 2 seconds between retries
 const MAX_RETRIES = 3;
@@ -24,13 +17,13 @@ export function useFetchISBN() {
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
 
-  // Fetch single ISBN with retry logic
-  const fetchISBN = useCallback(
+  // Fetch single book data with retry logic
+  const fetchBookData = useCallback(
     async (
       title: string,
       author: string,
       retryCount = 0
-    ): Promise<string | null> => {
+    ): Promise<PartialBook> => {
       try {
         const encodedTitle = encodeURIComponent(title);
         const encodedAuthor = encodeURIComponent(author);
@@ -41,7 +34,7 @@ export function useFetchISBN() {
         if (response.status === 429 && retryCount < MAX_RETRIES) {
           // If rate limited, wait and retry
           await delay(RETRY_DELAY * (retryCount + 1)); // Exponential backoff
-          return fetchISBN(title, author, retryCount + 1);
+          return fetchBookData(title, author, retryCount + 1);
         }
 
         if (!response.ok) {
@@ -49,23 +42,32 @@ export function useFetchISBN() {
         }
 
         const data: GoogleBooksResponse = await response.json();
+        const firstBook = data.items?.[0]?.volumeInfo;
 
-        if (data.items?.[0]?.volumeInfo?.industryIdentifiers) {
-          const identifiers = data.items[0].volumeInfo.industryIdentifiers;
-          const isbn13 = identifiers.find((id) => id.type === "ISBN_13");
-          const isbn10 = identifiers.find((id) => id.type === "ISBN_10");
+        if (firstBook) {
+          const identifiers = firstBook.industryIdentifiers;
+          const isbn13 = identifiers?.find((id) => id.type === "ISBN_13");
+          const isbn10 = identifiers?.find((id) => id.type === "ISBN_10");
+          const coverUrl = firstBook.imageLinks?.thumbnail || undefined;
 
-          return isbn10?.identifier || isbn13?.identifier || null;
+          return {
+            isbn: isbn13?.identifier || isbn10?.identifier || "",
+            coverUrl: coverUrl
+              ? coverUrl.replace("http:", "https:")
+              : undefined,
+          };
         }
 
-        return null;
+        return { isbn: "", coverUrl: undefined };
       } catch (err) {
         if (retryCount < MAX_RETRIES) {
           await delay(RETRY_DELAY * (retryCount + 1));
-          return fetchISBN(title, author, retryCount + 1);
+          return fetchBookData(title, author, retryCount + 1);
         }
-        setError(err instanceof Error ? err.message : "Failed to fetch ISBN");
-        return null;
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch book data"
+        );
+        return { isbn: "", coverUrl: undefined };
       }
     },
     []
@@ -81,22 +83,23 @@ export function useFetchISBN() {
       const results = await Promise.all(
         batchBooks.map(async (book) => ({
           ...book,
-          isbn: await fetchISBN(book.title, book.author),
+          ...(await fetchBookData(book.title, book.author)),
         }))
       );
       return results;
     },
-    [fetchISBN]
+    [fetchBookData]
   );
 
-  // Fetch multiple ISBNs with batching
+  // Fetch multiple books' data with batching
   const fetchMultipleISBNs = useCallback(
     async (books: Array<{ title: string; author: string }>) => {
       setIsLoading(true);
       const results: Array<{
         title: string;
         author: string;
-        isbn: string | null;
+        isbn: string;
+        coverUrl?: string;
       }> = [];
 
       try {
@@ -111,7 +114,9 @@ export function useFetchISBN() {
           }
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch ISBNs");
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch book data"
+        );
       } finally {
         setIsLoading(false);
       }
@@ -122,7 +127,7 @@ export function useFetchISBN() {
   );
 
   return {
-    fetchISBN,
+    fetchBookData,
     fetchMultipleISBNs,
     isLoading,
     error,

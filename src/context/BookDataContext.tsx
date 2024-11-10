@@ -11,10 +11,7 @@ const cleanISBN = (isbn: string): string => {
   return isbn.replace(/^=?"?|"?$/g, "").trim();
 };
 
-const isThisYear = (date: Date): boolean => {
-  const currentYear = new Date().getFullYear();
-  return date.getFullYear() === currentYear;
-};
+const currentYear = new Date().getFullYear();
 
 export function BookDataProvider({
   children,
@@ -32,7 +29,6 @@ export function BookDataProvider({
 
     try {
       const initialProcessedBooks = rawBooks.map((book) => {
-        const dateRead = new Date(book["Date Read"]);
         const cleanedISBN = book.ISBN ? cleanISBN(book.ISBN) : null;
 
         return {
@@ -45,17 +41,18 @@ export function BookDataProvider({
           numPages: book["Number of Pages"]
             ? parseInt(book["Number of Pages"]) || undefined
             : undefined,
-          dateRead: dateRead,
+          dateRead: new Date(book["Date Read"]),
+          coverUrl: undefined,
         };
       });
 
+      const booksThisYear = initialProcessedBooks.filter(
+        (book) => book.dateRead.getFullYear() === currentYear
+      );
+
       // Filter books that need ISBN fetching
-      const booksNeedingISBN = initialProcessedBooks
-        .filter(
-          (book) =>
-            isThisYear(book.dateRead) && // Only process books from this year
-            (!book.isbn || book.isbn.length < 10)
-        )
+      const booksNeedingISBN = booksThisYear
+        .filter((book) => !book.isbn || book.isbn.length < 10)
         .map((book) => ({
           title: book.title,
           author: book.author,
@@ -63,23 +60,23 @@ export function BookDataProvider({
 
       // If there are books needing ISBN, fetch them
       if (booksNeedingISBN.length > 0) {
-        const fetchedISBNs = await fetchMultipleISBNs(booksNeedingISBN);
+        const fetchedBookData = await fetchMultipleISBNs(booksNeedingISBN);
 
-        // Create a map of title+author to ISBN for easy lookup
-        const isbnMap = new Map(
-          fetchedISBNs.map((book) => [
+        const bookDataMap = new Map(
+          fetchedBookData.map((book) => [
             `${book.title}-${book.author}`,
-            book.isbn,
+            [book.isbn, book.coverUrl] as const,
           ])
         );
 
         // Update the processed books with fetched ISBNs
         const finalProcessedBooks = initialProcessedBooks.map((book) => {
           if (!book.isbn) {
-            const fetchedISBN = isbnMap.get(`${book.title}-${book.author}`);
+            const fetchedData = bookDataMap.get(`${book.title}-${book.author}`);
             return {
               ...book,
-              isbn: fetchedISBN || "", // Use fetched ISBN or empty string if not found
+              isbn: fetchedData?.[0] || "",
+              coverUrl: fetchedData?.[1],
             };
           }
           return book;

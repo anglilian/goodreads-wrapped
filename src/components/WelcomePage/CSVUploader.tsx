@@ -80,7 +80,7 @@ export default function CSVUploader() {
 
       {(error || contextError) && (
         <div className="p-4 mt-4 text-red-800 bg-red-50 border border-red-200 rounded-lg">
-          <p>{error}</p>
+          <p className="text-sm">{error}</p>
         </div>
       )}
     </div>

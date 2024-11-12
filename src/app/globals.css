@@ -52,3 +52,27 @@
     disabled:opacity-50 disabled:cursor-not-allowed;
   }
 }
+
+@keyframes infinite-scroll {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.infinite-scroll {
+  animation: infinite-scroll 30s linear infinite;
+}
+
+.infinite-scroll::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background: inherit;
+  backface-visibility: hidden;
+}

@@ -36,4 +36,5 @@ export interface BookDataContextType {
   isLoading: boolean;
   error: string | null;
   processBooks: (rawBooks: RawBook[]) => void;
+  setProcessedBooks: (processedBooks: Book[]) => void;
 }

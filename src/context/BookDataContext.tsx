@@ -25,6 +25,10 @@ export function BookDataProvider({
   const { fetchMultipleBooks } = useGoogleBooksAPI();
   const { fetchMultipleCovers } = useOpenLibraryAPI();
 
+  const setProcessedBooks = (processedBooks: Book[]) => {
+    setBooks(processedBooks);
+  };
+
   const processBooks = async (rawBooks: RawBook[]) => {
     setIsLoading(true);
     setError(null);
@@ -134,6 +138,7 @@ export function BookDataProvider({
         isLoading,
         error,
         processBooks,
+        setProcessedBooks,
       }}
     >
       {children}

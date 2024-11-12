@@ -7,12 +7,16 @@ import { useBookData } from "@/hooks/useBookData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import Footer from "@/components/ui/Footer";
+import { mockBooks } from "@/tests/testData";
 
 export default function WelcomePage() {
   const currentYear = new Date().getFullYear();
-  const { books, isLoading } = useBookData();
+  const { books, isLoading, setProcessedBooks } = useBookData();
   const router = useRouter();
+
+  const handleUseDemoData = () => {
+    setProcessedBooks(mockBooks);
+  };
 
   useEffect(() => {
     if (!isLoading && books.length > 0) {
@@ -31,36 +35,38 @@ export default function WelcomePage() {
         {isLoading ? (
           <Loader />
         ) : (
-          <div className="space-y-6 text-center">
+          <div className="text-center">
             <div className="flex flex-col gap-8">
-              <div className="flex flex-col sm:grid sm:grid-cols-[100px_1fr] gap-2 sm:gap-x-3">
-                <p className="font-bold text-center sm:text-right">Step 1:</p>
-                <div className="flex flex-col items-center sm:items-start gap-2">
-                  <div className="flex flex-col items-center gap-1">
-                    <a
-                      href="https://www.goodreads.com/review/import"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <button className="btn-primary inline-flex items-center gap-2">
-                        Export Goodreads library
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
-                    </a>
-                    <a
-                      href="https://help.goodreads.com/s/article/How-do-I-import-or-export-my-books-1553870934590#:~:text=To%20Export%20your%20books%20to%20a%20.csv%20file"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Need help?
-                    </a>
-                  </div>
+              <div className="flex flex-col gap-2 ">
+                <p className="font-bold text-center ">Step 1</p>
+                <div className="flex flex-col items-center gap-2">
+                  <a
+                    href="https://www.goodreads.com/review/import"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <button className="btn-primary inline-flex items-center gap-2">
+                      Export Goodreads library
+                      <ExternalLink className="w-4 h-4" />
+                    </button>
+                  </a>
+                  <a
+                    href="https://help.goodreads.com/s/article/How-do-I-import-or-export-my-books-1553870934590#:~:text=To%20Export%20your%20books%20to%20a%20.csv%20file"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Need help?
+                  </a>
                 </div>
               </div>
-              <div className="flex flex-col sm:grid sm:grid-cols-[100px_1fr] gap-2 sm:gap-x-3">
-                <p className="font-bold text-center sm:text-right">Step 2:</p>
-                <CSVUploader></CSVUploader>
+              <div className="flex flex-col gap-2 ">
+                <p className="font-bold text-center">Step 2</p>
+                <CSVUploader />
+                <button onClick={handleUseDemoData} className="btn-primary">
+                  Use demo data
+                </button>
               </div>
+              <div></div>
             </div>
           </div>
         )}

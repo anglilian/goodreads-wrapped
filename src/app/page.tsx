@@ -1,8 +1,8 @@
 "use client";
 
 import { ExternalLink } from "lucide-react";
-import CSVUploader from "@/components/WelcomePage/CSVUploader";
-import Loader from "@/components/WelcomePage/Loader";
+import CSVUploader from "@/components/app/CSVUploader";
+import Loader from "@/components/app/Loader";
 import { useBookData } from "@/hooks/useBookData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -25,7 +25,7 @@ export default function WelcomePage() {
   }, [books.length, isLoading, router]);
 
   return (
-    <main className="h-screen bg-background flex flex-col p-4 overflow-hidden">
+    <main>
       <div className="flex-1 flex flex-col items-center justify-center min-h-fit gap-y-6">
         <div className="text-center space-y-2 mb-8">
           <h1>{currentYear}</h1>

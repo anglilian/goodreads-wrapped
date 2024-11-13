@@ -4,13 +4,23 @@ interface BookBackgroundProps {
   coverUrls: string[];
 }
 
-const COLUMN_OFFSETS = [0, -70, -30] as const;
+const COLUMN_OFFSETS = [0, -20, -70] as const;
 
 const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
   const getColumnBooks = (columnIndex: number) => {
     if (coverUrls.length <= 3) return coverUrls;
 
     const columnSize = Math.ceil(coverUrls.length / 3);
+    const start = columnIndex * columnSize;
+    let columnBooks = coverUrls.slice(start, start + columnSize);
+
+    // Pad shorter columns with books from the start
+    while (columnBooks.length < columnSize) {
+      columnBooks = [
+        ...columnBooks,
+        ...coverUrls.slice(0, columnSize - columnBooks.length),
+      ];
+    }
     return coverUrls.slice(
       columnSize * columnIndex,
       columnSize * (columnIndex + 1)
@@ -27,6 +37,16 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
                 className="infinite-scroll grid grid-cols-1 gap-2"
                 style={{ marginTop: `${offset}%` }}
               >
+                {getColumnBooks(index).map((coverUrl, imgIndex) => (
+                  <div key={imgIndex} className="aspect-[2/3] p-1">
+                    <img
+                      src={coverUrl}
+                      alt="Book cover"
+                      className="w-full h-full object-cover rounded-md shadow-md"
+                      loading="lazy"
+                    />
+                  </div>
+                ))}
                 {getColumnBooks(index).map((coverUrl, imgIndex) => (
                   <div key={imgIndex} className="aspect-[2/3] p-1">
                     <img

@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lato.variable} ${merriweather.variable} font-lato bg-background`}
+        className={`${lato.variable} ${merriweather.variable} font-lato bg-background h-screen flex flex-col p-4 overflow-hidden`}
       >
         <Providers>{children}</Providers>
         <Footer />

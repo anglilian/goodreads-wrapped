@@ -1,12 +1,15 @@
 "use client";
-import { createContext, useState, ReactNode } from "react";
+import { createContext, useState, ReactNode, useEffect } from "react";
 import { BookDataContextType, Book, RawBook } from "@/types/books";
 import { useGoogleBooksAPI } from "@/hooks/useGoogleBooksAPI";
 import { useOpenLibraryAPI } from "@/hooks/useOpenLibraryAPI";
+import DevTools from "@/components/ui/DevTools";
 
 export const BookDataContext = createContext<BookDataContextType | undefined>(
   undefined
 );
+
+const STORAGE_KEY = "goodreads_wrapped_books";
 
 const cleanISBN = (isbn: string): string => {
   return isbn.replace(/^=?"?|"?$/g, "").trim();
@@ -19,14 +22,50 @@ export function BookDataProvider({
 }: {
   children: ReactNode;
 }): JSX.Element {
-  const [books, setBooks] = useState<Book[]>([]);
+  // Initialize state from localStorage if available
+  const [books, setBooks] = useState<Book[]>(() => {
+    if (typeof window === "undefined") return [];
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // Restore Date objects from JSON strings
+        return parsed.map((book: any) => ({
+          ...book,
+          dateRead: new Date(book.dateRead),
+        }));
+      } catch (e) {
+        console.error("Error parsing stored books:", e);
+        return [];
+      }
+    }
+    return [];
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { fetchMultipleBooks } = useGoogleBooksAPI();
   const { fetchMultipleCovers } = useOpenLibraryAPI();
+  const [previousYearBookCount, setPreviousYearBookCount] = useState<number>(0);
+
+  // Save to localStorage whenever books change
+  useEffect(() => {
+    if (books.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
+    }
+  }, [books]);
 
   const setProcessedBooks = (processedBooks: Book[]) => {
-    setBooks(processedBooks);
+    setPreviousYearBookCount(
+      processedBooks.filter(
+        (book) => new Date(book.dateRead).getFullYear() === currentYear - 1
+      ).length
+    );
+    setBooks(
+      processedBooks.filter(
+        (book) => new Date(book.dateRead).getFullYear() === currentYear
+      )
+    );
   };
 
   const processBooks = async (rawBooks: RawBook[]) => {
@@ -34,6 +73,11 @@ export function BookDataProvider({
     setError(null);
 
     try {
+      const lastYearCount = rawBooks.filter(
+        (book) => new Date(book["Date Read"]).getFullYear() === currentYear - 1
+      ).length;
+      setPreviousYearBookCount(lastYearCount);
+
       const initialProcessedBooks = rawBooks.map((book) => {
         const cleanedISBN = book.ISBN ? cleanISBN(book.ISBN) : null;
 
@@ -131,14 +175,21 @@ export function BookDataProvider({
     }
   };
 
+  const clearBooks = () => {
+    setBooks([]);
+    localStorage.removeItem(STORAGE_KEY);
+  };
+
   return (
     <BookDataContext.Provider
       value={{
         books,
+        previousYearBookCount,
         isLoading,
         error,
         processBooks,
         setProcessedBooks,
+        clearBooks,
       }}
     >
       {children}
@@ -147,5 +198,10 @@ export function BookDataProvider({
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <BookDataProvider>{children}</BookDataProvider>;
+  return (
+    <BookDataProvider>
+      {children}
+      <DevTools></DevTools>
+    </BookDataProvider>
+  );
 }

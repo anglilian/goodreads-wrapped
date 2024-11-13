@@ -7,7 +7,7 @@ export const mockBooks: Book[] = [
     author: "E. Lockhart",
     rating: 3,
     numPages: 294,
-    dateRead: new Date("2024-11-02"),
+    dateRead: new Date("2023-11-02"),
     coverUrl:
       "https://books.google.com/books/content?id=kO9FEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
   },
@@ -18,7 +18,7 @@ export const mockBooks: Book[] = [
     author: "Gene Kim",
     rating: 4,
     numPages: 345,
-    dateRead: new Date("2024-10-27"),
+    dateRead: new Date("2023-10-27"),
     coverUrl:
       "https://books.google.com/books/content?id=H6x-DwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
   },

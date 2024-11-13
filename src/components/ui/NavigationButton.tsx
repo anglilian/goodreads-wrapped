@@ -40,9 +40,9 @@ export default function NavigationButton({
       {...props}
     >
       {direction === "previous" ? (
-        <ChevronLeft className="w-6 h-6" />
+        <ChevronLeft className="w-full" />
       ) : (
-        <ChevronRight className="w-6 h-6" />
+        <ChevronRight className="w-full" />
       )}
     </button>
   );

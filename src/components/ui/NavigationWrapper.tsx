@@ -41,7 +41,7 @@ export default function NavigationButtons() {
   }
 
   return (
-    <div className="flex justify-between w-full px-4 mt-8">
+    <div className="flex gap-4">
       <NavigationButton
         direction="previous"
         href={PAGE_ORDER[currentPageIndex - 1]}

@@ -53,7 +53,7 @@
   }
 }
 
-@keyframes infinite-scroll {
+@keyframes vertical-scroll {
   from {
     transform: translateY(-50%);
   }
@@ -62,19 +62,41 @@
   }
 }
 
-.infinite-scroll {
-  animation: infinite-scroll 30s linear infinite;
+.vertical-scroll {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  animation: vertical-scroll 20s linear infinite;
 }
 
-.infinite-scroll::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
+.column {
+  position: relative;
+  overflow: hidden;
   height: 100%;
-  background: inherit;
-  backface-visibility: hidden;
+}
+
+.column .infinite-scroll {
+  width: 100%;
+}
+
+.column:nth-child(1) .infinite-scroll {
+  animation-delay: 0s;
+}
+
+.column:nth-child(2) .infinite-scroll {
+  animation-delay: 5s; /* Adjust for staggered effect */
+}
+
+.column:nth-child(3) .infinite-scroll {
+  animation-delay: 10s; /* Adjust for staggered effect */
+}
+
+.column img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes horizontal-scroll {
@@ -87,5 +109,7 @@
 }
 
 .horizontal-scroll {
-  animation: horizontal-scroll 10s linear infinite;
+  display: flex;
+  animation: horizontal-scroll 20s linear infinite;
+  width: max-content;
 }

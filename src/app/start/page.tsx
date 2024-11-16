@@ -23,8 +23,8 @@ export default function StartPage() {
       <BookBackground coverUrls={coverUrls} />
 
       {/* Content container */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-background bg-opacity-90 gap-4">
-        <div className="flex flex-col gap-1 items-center justify-center">
+      <div className="absolute inset-0 bg-background bg-opacity-90 flex flex-col items-center justify-center gap-4">
+        <div className="flex flex-col items-center text-center gap-1">
           <h2>Your</h2>
           <h1>{currentYear}</h1>
           <h2> in Books</h2>

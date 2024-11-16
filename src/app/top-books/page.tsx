@@ -1,7 +1,7 @@
 "use client";
 import { useBookData } from "@/hooks/useBookData";
 import Ratings from "@/components/top-books/Ratings";
-import HorizontalCarousel from "@/components/top-books/HorizontalCarousel";
+import BookCoverCarousel from "@/components/top-books/BookCoverCarousel";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 
 export default function TopBooks() {
@@ -13,7 +13,7 @@ export default function TopBooks() {
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-fit gap-y-6">
       <h4>Remember these?</h4>
-      <HorizontalCarousel coverUrls={fiveStarBooks}></HorizontalCarousel>
+      <BookCoverCarousel coverUrls={fiveStarBooks} />
       <h2>
         You <span className="text-secondary italic">really</span> loved them
       </h2>

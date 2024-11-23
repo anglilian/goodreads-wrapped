@@ -39,7 +39,7 @@ export default function PagesRead() {
         <h4>You read</h4>
         <h1>{thisYearPages.toLocaleString()} pages</h1>
         <h5 className="mt-4">
-          (that's{" "}
+          {"(that's "}
           <span className="text-secondary font-bold">{ratio} times</span> more
           than last year!)
         </h5>

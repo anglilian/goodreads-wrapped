@@ -26,7 +26,7 @@ export default function WelcomePage() {
 
   return (
     <main>
-      <div className="flex-1 flex flex-col items-center justify-center min-h-fit gap-y-6">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-screen gap-y-2">
         <div className="text-center space-y-2 mb-8">
           <h1>{currentYear}</h1>
           <h3>Goodreads Wrapped</h3>
@@ -36,7 +36,7 @@ export default function WelcomePage() {
           <Loader />
         ) : (
           <div className="text-center">
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2 ">
                 <p className="font-bold text-center ">Step 1</p>
                 <div className="flex flex-col items-center gap-2">

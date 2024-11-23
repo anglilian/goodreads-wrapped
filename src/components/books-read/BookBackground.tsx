@@ -17,7 +17,16 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
       <div className="w-full max-w-2xl grid grid-cols-3 gap-4 h-full">
         {Array.from({ length: numColumns }, (_, index) => (
           <div key={index} className="column">
-            <div className="vertical-scroll">
+            <div
+              className="vertical-scroll"
+              style={{
+                willChange: "transform",
+                backfaceVisibility: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+              }}
+            >
               {getColumnBooks(index).map((coverUrl, imgIndex) => (
                 <div key={imgIndex} className="aspect-[2/3]">
                   <img

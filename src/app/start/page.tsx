@@ -15,7 +15,9 @@ export default function StartPage() {
 
   // Extract cover URLs, filtering out any undefined coverUrls
   const coverUrls = books
-    .filter((book) => book.coverUrl) // Only keep books that have a coverUrl
+    .filter(
+      (book) => book.coverUrl && book.dateRead.getFullYear() === currentYear
+    ) // Only keep books that have a coverUrl and are from the current year
     .map((book) => book.coverUrl as string); // Convert to string array
 
   return (
@@ -25,9 +27,9 @@ export default function StartPage() {
       {/* Content container */}
       <div className="absolute inset-0 bg-background bg-opacity-90 flex flex-col items-center justify-center gap-4">
         <div className="flex flex-col items-center text-center gap-1">
-          <h2>Your</h2>
+          <h3>Your</h3>
           <h1>{currentYear}</h1>
-          <h2> in Books</h2>
+          <h3> in Books</h3>
         </div>
 
         <button className="btn-primary" onClick={handleStart}>

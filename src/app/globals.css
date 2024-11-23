@@ -28,6 +28,10 @@
     @apply font-lato text-2xl lg:text-4xl font-bold text-primary;
   }
 
+  h5 {
+    @apply font-lato text-xl lg:text-2xl font-bold text-primary;
+  }
+
   p {
     @apply font-lato text-base text-primary;
   }
@@ -55,10 +59,10 @@
 
 @keyframes vertical-scroll {
   from {
-    transform: translateY(-50%);
+    transform: translateY(0%);
   }
   to {
-    transform: translateY(0);
+    transform: translateY(-50%);
   }
 }
 
@@ -75,20 +79,20 @@
   height: 100%;
 }
 
-.column .infinite-scroll {
+.column .vertical-scroll {
   width: 100%;
 }
 
-.column:nth-child(1) .infinite-scroll {
+.column:nth-child(1) .vertical-scroll {
   animation-delay: 0s;
 }
 
-.column:nth-child(2) .infinite-scroll {
-  animation-delay: 5s; /* Adjust for staggered effect */
+.column:nth-child(2) .vertical-scroll {
+  animation-delay: -5s;
 }
 
-.column:nth-child(3) .infinite-scroll {
-  animation-delay: 10s; /* Adjust for staggered effect */
+.column:nth-child(3) .vertical-scroll {
+  animation-delay: -10s;
 }
 
 .column img {
@@ -112,4 +116,6 @@
   display: flex;
   animation: horizontal-scroll 20s linear infinite;
   width: max-content;
+  gap: 1rem;
+  padding: 0 1rem;
 }

@@ -46,7 +46,6 @@ export function BookDataProvider({
   const [error, setError] = useState<string | null>(null);
   const { fetchMultipleBooks } = useGoogleBooksAPI();
   const { fetchMultipleCovers } = useOpenLibraryAPI();
-  const [previousYearBookCount, setPreviousYearBookCount] = useState<number>(0);
 
   // Save to localStorage whenever books change
   useEffect(() => {
@@ -56,16 +55,7 @@ export function BookDataProvider({
   }, [books]);
 
   const setProcessedBooks = (processedBooks: Book[]) => {
-    setPreviousYearBookCount(
-      processedBooks.filter(
-        (book) => new Date(book.dateRead).getFullYear() === currentYear - 1
-      ).length
-    );
-    setBooks(
-      processedBooks.filter(
-        (book) => new Date(book.dateRead).getFullYear() === currentYear
-      )
-    );
+    setBooks(processedBooks);
   };
 
   const processBooks = async (rawBooks: RawBook[]) => {
@@ -73,38 +63,30 @@ export function BookDataProvider({
     setError(null);
 
     try {
-      const lastYearCount = rawBooks.filter(
-        (book) => new Date(book["Date Read"]).getFullYear() === currentYear - 1
-      ).length;
-      setPreviousYearBookCount(lastYearCount);
+      // Process all books to get basic data and counts
+      const allProcessedBooks = rawBooks.map((book) => ({
+        isbn: book.ISBN ? cleanISBN(book.ISBN) : "",
+        rating: book["My Rating"]
+          ? parseInt(book["My Rating"]) || undefined
+          : undefined,
+        title: book.Title,
+        author: book.Author,
+        numPages: book["Number of Pages"]
+          ? parseInt(book["Number of Pages"]) || undefined
+          : undefined,
+        dateRead: new Date(book["Date Read"]),
+      })) as Book[];
 
-      const initialProcessedBooks = rawBooks.map((book) => {
-        const cleanedISBN = book.ISBN ? cleanISBN(book.ISBN) : null;
-
-        return {
-          isbn: cleanedISBN ? cleanedISBN : "",
-          rating: book["My Rating"]
-            ? parseInt(book["My Rating"]) || undefined
-            : undefined,
-          title: book.Title,
-          author: book.Author,
-          numPages: book["Number of Pages"]
-            ? parseInt(book["Number of Pages"]) || undefined
-            : undefined,
-          dateRead: new Date(book["Date Read"]),
-        };
-      }) as Book[];
-
-      // Filter for books read this year
-      const booksThisYear = initialProcessedBooks.filter(
+      // Only process current year's books for API calls
+      const booksThisYear = allProcessedBooks.filter(
         (book) => book.dateRead.getFullYear() === currentYear
       );
 
-      // Separate books with and without ISBNs
+      // Separate books with and without ISBNs (only for current year)
       const booksWithISBN = booksThisYear.filter((book) => book.isbn !== "");
       const booksWithoutISBN = booksThisYear.filter((book) => book.isbn === "");
 
-      // 1. Get OpenLibrary covers for books with ISBNs
+      // Remove duplicate block and keep only one instance of OpenLibrary cover fetching
       if (booksWithISBN.length > 0) {
         const openLibraryCoverUrls = await fetchMultipleCovers(
           booksWithISBN.map((book) => book.isbn)
@@ -165,8 +147,8 @@ export function BookDataProvider({
         });
       }
 
-      // Combine all processed books
-      setBooks([...booksWithISBN, ...booksWithoutISBN]);
+      // Store all books, but only current year's books will have cover URLs
+      setBooks(allProcessedBooks);
     } catch (err) {
       setError("Error processing books data");
       console.error(err);
@@ -184,7 +166,6 @@ export function BookDataProvider({
     <BookDataContext.Provider
       value={{
         books,
-        previousYearBookCount,
         isLoading,
         error,
         processBooks,

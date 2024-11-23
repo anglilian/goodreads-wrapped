@@ -33,7 +33,6 @@ export interface Book {
 
 export interface BookDataContextType {
   books: Book[];
-  previousYearBookCount: number;
   isLoading: boolean;
   error: string | null;
   processBooks: (rawBooks: RawBook[]) => void;

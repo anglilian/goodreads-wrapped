@@ -6,9 +6,12 @@ import NavigationButtons from "@/components/ui/NavigationWrapper";
 
 export default function TopBooks() {
   const { books } = useBookData();
+  const currentYear = new Date().getFullYear();
 
   const fiveStarBooks = books
-    .filter((book) => book.rating === 5)
+    .filter(
+      (book) => book.rating === 5 && book.dateRead.getFullYear() === currentYear
+    )
     .map((book) => book.coverUrl as string); // Convert to string array
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-fit gap-y-6">

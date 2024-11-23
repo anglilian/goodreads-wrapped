@@ -26,10 +26,13 @@ const BookCoverCarousel = ({ coverUrls }: BookCoverCarouselProps) => {
   const duplicatedBooks = [...coverUrls, ...coverUrls];
 
   return (
-    <div className="relative overflow-hidden w-96">
-      <div className="horizontal-scroll gap-4">
+    <div className="relative overflow-hidden max-w-96">
+      {/* Left fade overlay */}
+      <div className="absolute left-0 top-0 h-full w-4 bg-gradient-to-r from-background to-transparent z-10" />
+
+      <div className="horizontal-scroll">
         {duplicatedBooks.map((url, index) => (
-          <div key={index} className="flex-shrink-0">
+          <div key={`${url}-${index}`} className="flex-shrink-0">
             <img
               src={url}
               alt="Book cover"
@@ -39,6 +42,9 @@ const BookCoverCarousel = ({ coverUrls }: BookCoverCarouselProps) => {
           </div>
         ))}
       </div>
+
+      {/* Right fade overlay */}
+      <div className="absolute right-0 top-0 h-full w-4 bg-gradient-to-l from-background to-transparent z-10" />
     </div>
   );
 };

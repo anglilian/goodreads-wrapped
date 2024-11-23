@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useBookData } from "@/hooks/useBookData";
-import BackgroundContainer from "@/context/BackgroundContainer";
 import { useRouter } from "next/navigation";
 import { RotateCcw, Share2 } from "lucide-react"; // Add Share2 import
+import NavigationButtons from "@/components/ui/NavigationWrapper";
 
 export default function Summary() {
   const { books } = useBookData();
@@ -96,6 +96,7 @@ export default function Summary() {
           </button>
         </div>
       </div>
+      <NavigationButtons />
     </div>
   );
 }

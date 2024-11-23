@@ -56,15 +56,12 @@ export default function BooksRead() {
   };
 
   return (
-    <div className="relative min-h-screen">
-      {/* Content container */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-opacity-0 gap-4">
-        <div className="flex flex-col gap-4 items-center justify-center bg-background p-8 rounded-md">
-          <h3>You read</h3>
-          <h1>{getBookCountText()}</h1>
-          <h5>{getComparisonText()}</h5>
-          <NavigationButtons />
-        </div>
+    <div className="page-container">
+      <div className="flex flex-col gap-4 items-center justify-center text-center bg-background p-8 rounded-md">
+        <h3>You read</h3>
+        <h1>{getBookCountText()}</h1>
+        <h5>{getComparisonText()}</h5>
+        <NavigationButtons />
       </div>
     </div>
   );

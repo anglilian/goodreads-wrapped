@@ -25,16 +25,14 @@ export default function BookRating() {
   const getBarHeight = (count: number) => (count / maxCount) * maxHeight;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-y-[5vh] p-4">
-      <div className="text-center">
-        <h2>
-          You <span className="text-secondary italic">loved</span> most of what
-          you read
-        </h2>
-      </div>
+    <div className="page-container">
+      <h2>
+        You <span className="text-secondary italic">loved</span> most of what
+        you read
+      </h2>
 
       {/* Rating bars container */}
-      <div className="flex justify-center items-end gap-[2vw] w-full max-w-xl">
+      <div className="flex justify-center items-end gap-2 w-full max-w-xl">
         {[3, 4, 5].map((rating) => (
           <div
             key={rating}
@@ -54,7 +52,7 @@ export default function BookRating() {
               </div>
             </div>
             {/* Rating stars */}
-            <div className="mt-4 w-full">
+            <div className="w-full">
               <Ratings rating={rating} />
             </div>
           </div>

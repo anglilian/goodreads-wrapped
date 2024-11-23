@@ -3,7 +3,6 @@ import { createContext, useState, ReactNode, useEffect } from "react";
 import { BookDataContextType, Book, RawBook } from "@/types/books";
 import { useGoogleBooksAPI } from "@/hooks/useGoogleBooksAPI";
 import { useOpenLibraryAPI } from "@/hooks/useOpenLibraryAPI";
-import DevTools from "@/components/ui/DevTools";
 
 export const BookDataContext = createContext<BookDataContextType | undefined>(
   undefined
@@ -179,10 +178,5 @@ export function BookDataProvider({
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return (
-    <BookDataProvider>
-      {children}
-      <DevTools></DevTools>
-    </BookDataProvider>
-  );
+  return <BookDataProvider>{children}</BookDataProvider>;
 }

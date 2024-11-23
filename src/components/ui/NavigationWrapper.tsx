@@ -1,30 +1,14 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import {
+  useKeyboardNavigation,
+  PAGE_ORDER,
+} from "@/hooks/useKeyboardNavigation";
 import NavigationButton from "./NavigationButton";
 
-const PAGE_ORDER = [
-  "/start",
-  "/books-read",
-  "/top-books",
-  "/book-rating",
-  "/pages-read",
-  // "/top-genre",
-  // "/top-genre-books",
-  "/summary",
-];
-
 export default function NavigationButtons() {
-  const pathname = usePathname();
-  const currentPageIndex = PAGE_ORDER.indexOf(pathname);
-
-  // Don't show navigation on welcome page
-  if (
-    pathname === "/" ||
-    currentPageIndex === -1 ||
-    pathname === "/summary" ||
-    pathname === "/start"
-  ) {
+  const { showNavigation, currentPageIndex } = useKeyboardNavigation();
+  if (!showNavigation) {
     return null;
   }
 

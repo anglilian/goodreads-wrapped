@@ -16,7 +16,7 @@ export default function TopBooks() {
     .map((book) => book.coverUrl as string);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-y-6">
+    <div className="page-container">
       <h4>Remember these?</h4>
       <BookCoverCarousel coverUrls={fiveStarBooks} />
       <h2>

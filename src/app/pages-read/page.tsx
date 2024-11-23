@@ -3,6 +3,7 @@ import React from "react";
 import { useBookData } from "@/hooks/useBookData";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 import BookStack from "@/components/pages-read/BookStack";
+import EmojiButton from "@/components/ui/EmojiButton";
 
 export default function PagesRead() {
   const { books } = useBookData();
@@ -43,6 +44,8 @@ export default function PagesRead() {
           than last year!)
         </h5>
       </div>
+
+      <EmojiButton emoji="😲" />
 
       <div className="relative flex justify-center items-end gap-16 mb-2">
         <div className="flex flex-col items-center">

@@ -2,6 +2,7 @@
 import { useBookData } from "@/hooks/useBookData";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 import Ratings from "@/components/top-books/Ratings";
+import EmojiButton from "@/components/ui/EmojiButton";
 
 export default function BookRating() {
   const { books } = useBookData();
@@ -61,6 +62,10 @@ export default function BookRating() {
       </div>
 
       <h4 className="text-center">You sure know how to pick them!</h4>
+
+      {/* Added Emoji Button */}
+      <EmojiButton emoji="💪" />
+
       <NavigationButtons />
     </div>
   );

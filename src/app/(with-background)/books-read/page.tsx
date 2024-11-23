@@ -42,14 +42,17 @@ export default function BooksRead() {
     if (difference >= 0) {
       return (
         <span>
-          (that&apos;s <span className="text-secondary">{difference} more</span>{" "}
-          than last year!)
+          (that&apos;s{" "}
+          <span className="text-secondary italic">{difference} more </span> than
+          last year!)
         </span>
       );
     }
 
     // If fewer books were read this year
-    return `(that's ${Math.abs(difference)} fewer than last year)`;
+    return (
+      <span>(that&apos;s {Math.abs(difference)} fewer than last year)</span>
+    );
   };
 
   return (

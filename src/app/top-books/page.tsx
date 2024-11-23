@@ -3,6 +3,7 @@ import { useBookData } from "@/hooks/useBookData";
 import Ratings from "@/components/top-books/Ratings";
 import BookCoverCarousel from "@/components/top-books/BookCoverCarousel";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
+import EmojiButton from "@/components/ui/EmojiButton";
 
 export default function TopBooks() {
   const { books } = useBookData();
@@ -12,7 +13,8 @@ export default function TopBooks() {
     .filter(
       (book) => book.rating === 5 && book.dateRead.getFullYear() === currentYear
     )
-    .map((book) => book.coverUrl as string); // Convert to string array
+    .map((book) => book.coverUrl as string);
+
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-fit gap-y-6">
       <h4>Remember these?</h4>
@@ -20,7 +22,8 @@ export default function TopBooks() {
       <h2>
         You <span className="text-secondary italic">really</span> loved them
       </h2>
-      <Ratings rating={5}></Ratings>
+      <Ratings rating={5} />
+      <EmojiButton emoji="🥰" />
       <NavigationButtons />
     </div>
   );

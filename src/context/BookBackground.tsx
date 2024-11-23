@@ -14,7 +14,7 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden flex justify-center p-2">
-      <div className="w-full max-w-2xl grid grid-cols-3 gap-4 h-full">
+      <div className="max-w-2xl flex gap-4 h-full">
         {Array.from({ length: numColumns }, (_, index) => (
           <div key={index} className="column">
             <div

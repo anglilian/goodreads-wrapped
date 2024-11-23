@@ -8,7 +8,7 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
   const numColumns = 3;
 
   const getColumnBooks = (columnIndex: number) => {
-    // Distribute books evenly across columns using modulo
+    // Ensure even distribution by taking every nth item where n is numColumns
     return coverUrls.filter((_, i) => i % numColumns === columnIndex);
   };
 
@@ -25,8 +25,10 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
+                transform: "translateZ(0)", // Force GPU acceleration
               }}
             >
+              {/* Original set of books */}
               {getColumnBooks(index).map((coverUrl, imgIndex) => (
                 <div key={imgIndex} className="aspect-[2/3]">
                   <img
@@ -37,6 +39,7 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
                   />
                 </div>
               ))}
+              {/* Duplicate set for seamless scrolling */}
               {getColumnBooks(index).map((coverUrl, imgIndex) => (
                 <div key={`duplicate-${imgIndex}`} className="aspect-[2/3]">
                   <img

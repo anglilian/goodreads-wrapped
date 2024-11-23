@@ -9,8 +9,8 @@ const PAGE_ORDER = [
   "/top-books",
   "/book-rating",
   "/pages-read",
-  "/top-genre",
-  "/top-genre-books",
+  // "/top-genre",
+  // "/top-genre-books",
   "/summary",
 ];
 

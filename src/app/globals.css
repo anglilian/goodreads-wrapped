@@ -21,7 +21,7 @@
   }
 
   h3 {
-    @apply font-lato text-4xl lg:text-6xl font-bold text-primary;
+    @apply font-lato text-4xl lg:text-5xl font-bold text-primary;
   }
 
   h4 {

@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useBookData } from "@/hooks/useBookData";
-import BookBackground from "@/components/books-read/BookBackground";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 
 export default function BooksRead() {
@@ -21,11 +20,6 @@ export default function BooksRead() {
     (book) => book.dateRead.getFullYear() === previousYear
   );
   const previousYearBookCount = previousYearBooks.length;
-
-  // Extract cover URLs, filtering out any undefined coverUrls
-  const coverUrls = books
-    .filter((book) => book.coverUrl) // Only keep books that have a coverUrl
-    .map((book) => book.coverUrl as string); // Convert to string array
 
   // Determine the book count text
   const getBookCountText = () => {
@@ -60,8 +54,6 @@ export default function BooksRead() {
 
   return (
     <div className="relative min-h-screen">
-      <BookBackground coverUrls={coverUrls} />
-
       {/* Content container */}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-opacity-0 gap-4">
         <div className="flex flex-col gap-4 items-center justify-center bg-background p-8 rounded-md">

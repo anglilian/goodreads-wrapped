@@ -28,18 +28,6 @@ export default function NavigationButtons() {
     return null;
   }
 
-  // Only show next button on first content page
-  if (pathname === "/books-read") {
-    return (
-      <div className="flex px-4 mt-8">
-        <NavigationButton
-          direction="next"
-          href={PAGE_ORDER[currentPageIndex + 1]}
-        />
-      </div>
-    );
-  }
-
   return (
     <div className="flex gap-4">
       <NavigationButton

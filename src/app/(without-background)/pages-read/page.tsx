@@ -34,7 +34,7 @@ export default function PagesRead() {
   const maxPages = Math.max(thisYearPages, lastYearPages);
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center min-h-screen gap-4">
+    <div className="flex flex-col items-center justify-center gap-4">
       <div className="text-center space-y-4">
         <h4>You read</h4>
         <h1>{thisYearPages.toLocaleString()} pages</h1>

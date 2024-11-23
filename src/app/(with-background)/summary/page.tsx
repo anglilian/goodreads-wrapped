@@ -75,7 +75,7 @@ export default function Summary() {
           </div>
           <div className="text-center space-y-2 bg-secondary-button bg-opacity-40 rounded-lg p-4">
             <h5>top genre</h5>
-            <h2 className="text-secondary">self-improvement</h2>
+            <h2 className="text-secondary">coming soon!</h2>
           </div>
         </div>
 

@@ -25,7 +25,7 @@ export default function BookRating() {
   const getBarHeight = (count: number) => (count / maxCount) * maxHeight;
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center min-h-screen gap-y-[5vh] p-4">
+    <div className="flex flex-col items-center justify-center gap-y-[5vh] p-4">
       <div className="text-center">
         <h2>
           You <span className="text-secondary italic">loved</span> most of what

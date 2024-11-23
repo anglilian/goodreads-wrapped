@@ -10,6 +10,10 @@ export default function StartPage() {
     await router.push("/books-read");
   };
 
+  const handleBackToHome = async () => {
+    await router.push("/");
+  };
+
   return (
     <div className="relative min-h-screen">
       {/* Content container */}
@@ -20,9 +24,17 @@ export default function StartPage() {
           <h3> in Books</h3>
         </div>
 
-        <button className="btn-primary" onClick={handleStart}>
-          Start
-        </button>
+        <div className="flex flex-col gap-2">
+          <button className="btn-primary" onClick={handleStart}>
+            Start
+          </button>
+          <button
+            className="text-sm text-secondary-button hover:text-secondary transition-colors"
+            onClick={handleBackToHome}
+          >
+            Back to Home
+          </button>
+        </div>
       </div>
     </div>
   );

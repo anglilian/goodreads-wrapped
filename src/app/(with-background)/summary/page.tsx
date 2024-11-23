@@ -57,7 +57,7 @@ export default function Summary() {
     <div className="flex flex-col items-center justify-center h-screen">
       <div className="flex flex-col gap-4 items-center bg-background p-8 rounded-md">
         <div className="text-center space-y-2">
-          <h3>That's a wrap for</h3>
+          <h3>{"That's a wrap for"}</h3>
           <h1>{currentYear}</h1>
         </div>
 

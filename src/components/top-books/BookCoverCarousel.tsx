@@ -28,7 +28,7 @@ const BookCoverCarousel = ({ coverUrls }: BookCoverCarouselProps) => {
   return (
     <div className="relative overflow-hidden max-w-96">
       {/* Left fade overlay */}
-      <div className="absolute left-0 top-0 h-full w-4 bg-gradient-to-r from-background to-transparent z-10" />
+      <div className="absolute left-0 top-0 h-full w-2 bg-gradient-to-r from-background to-transparent z-10" />
 
       <div className="horizontal-scroll">
         {duplicatedBooks.map((url, index) => (
@@ -44,7 +44,7 @@ const BookCoverCarousel = ({ coverUrls }: BookCoverCarouselProps) => {
       </div>
 
       {/* Right fade overlay */}
-      <div className="absolute right-0 top-0 h-full w-4 bg-gradient-to-l from-background to-transparent z-10" />
+      <div className="absolute right-0 top-0 h-full w-2 bg-gradient-to-l from-background to-transparent z-10" />
     </div>
   );
 };

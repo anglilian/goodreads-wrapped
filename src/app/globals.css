@@ -1,7 +1,9 @@
+/* Tailwind Directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Root Variables */
 :root {
   --color-primary: #372212;
   --color-primary-button: #03635d;
@@ -11,6 +13,7 @@
   --color-background: #f4f1ea;
 }
 
+/* Base Styles */
 @layer base {
   h1 {
     @apply font-merriweather text-6xl lg:text-8xl font-bold text-secondary;
@@ -41,6 +44,7 @@
   }
 }
 
+/* Component Styles */
 @layer components {
   .btn-primary {
     @apply bg-primary-button text-white px-4 py-2 rounded-lg font-lato text-base
@@ -61,6 +65,7 @@
   }
 }
 
+/* Animation Keyframes */
 @keyframes vertical-scroll {
   from {
     transform: translateY(0%);
@@ -70,43 +75,6 @@
   }
 }
 
-.vertical-scroll {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  animation: vertical-scroll 20s linear infinite;
-}
-
-.column {
-  position: relative;
-  overflow: hidden;
-  @apply flex-1 h-screen;
-}
-
-.column .vertical-scroll {
-  width: 100%;
-}
-
-.column:nth-child(1) .vertical-scroll {
-  animation-delay: 0s;
-}
-
-.column:nth-child(2) .vertical-scroll {
-  animation-delay: -7s;
-}
-
-.column:nth-child(3) .vertical-scroll {
-  animation-delay: -15s;
-}
-
-.column img {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 @keyframes horizontal-scroll {
   0% {
     transform: translateX(0);
@@ -114,14 +82,6 @@
   100% {
     transform: translateX(-50%);
   }
-}
-
-.horizontal-scroll {
-  display: flex;
-  animation: horizontal-scroll 20s linear infinite;
-  width: max-content;
-  gap: 1rem;
-  padding: 0 1rem;
 }
 
 @keyframes float-up {
@@ -135,6 +95,56 @@
   }
 }
 
+/* Scroll Animations */
+.vertical-scroll {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  animation: vertical-scroll 20s linear infinite;
+}
+
+.horizontal-scroll {
+  display: flex;
+  animation: horizontal-scroll 10s linear infinite;
+  width: max-content;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+/* Column Layout Styles */
+.column {
+  position: relative;
+  overflow: hidden;
+  @apply flex-1 h-screen;
+}
+
+.column .vertical-scroll {
+  width: 100%;
+}
+
+/* Column Animation Delays */
+.column:nth-child(1) .vertical-scroll {
+  animation-delay: 0s;
+}
+
+.column:nth-child(2) .vertical-scroll {
+  animation-delay: -7s;
+}
+
+.column:nth-child(3) .vertical-scroll {
+  animation-delay: -15s;
+}
+
+/* Image Styles */
+.column img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Utility Classes */
 .animate-float-up {
   animation: float-up 1s ease-out forwards;
 }

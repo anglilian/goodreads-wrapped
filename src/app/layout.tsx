@@ -19,7 +19,24 @@ const merriweather = Merriweather({
 
 export const metadata: Metadata = {
   title: "Goodreads Wrapped",
-  description: "Visualize your year in books",
+  description: "Visualise your year in books",
+  keywords: ["books", "reading", "goodreads", "wrapped", "year in review"],
+  authors: [{ name: "Ang Li-Lian", url: "https://anglilian.com" }],
+  openGraph: {
+    title: "Goodreads Wrapped",
+    description: "Visualize your year in books with Goodreads Wrapped",
+    url: "https://goodreads-wrapped.anglilian.com",
+    siteName: "Goodreads Wrapped",
+    // images: [
+    //   {
+    //     url: "/og-image.png", // Add an og-image.png to your public folder
+    //     width: 1200,
+    //     height: 630,
+    //   },
+    // ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({

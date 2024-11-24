@@ -24,17 +24,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
         <h5 className="font-bold mb-4">How to export your Goodreads library</h5>
         <ol className="list-decimal list-inside space-y-2">
           <li>
-            Go to{" "}
-            <a
-              href="https://www.goodreads.com/review/list"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="font-bold">My Books</span>
-            </a>
-          </li>
-          <li>
-            Click on{" "}
+            Go to the{" "}
             <a
               href="https://www.goodreads.com/review/import"
               target="_blank"
@@ -42,7 +32,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
             >
               <span className="font-bold">Import and export</span>
             </a>{" "}
-            under <span className="font-bold">Tools</span> on the left.
+            in your Goodreads account.
           </li>
           <li>
             Click on the <span className="font-bold">Export Library</span>{" "}

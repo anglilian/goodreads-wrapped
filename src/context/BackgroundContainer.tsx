@@ -1,6 +1,6 @@
 "use client";
 import { useBookData } from "@/hooks/useBookData";
-import BookBackground from "./BookBackground";
+import BookBackground from "@/components/ui/BookBackground";
 
 export default function BackgroundContainer() {
   const { books } = useBookData();

@@ -59,7 +59,7 @@ export default function PagesRead() {
         </div>
 
         <div
-          className="absolute bottom-0 w-96 h-[2px] bg-secondary-button rounded-full"
+          className="absolute bottom-0 w-full h-[2px] bg-secondary-button rounded-full -z-10"
           style={{
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
           }}

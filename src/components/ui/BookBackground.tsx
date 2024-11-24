@@ -6,8 +6,19 @@ interface BookBackgroundProps {
 
 const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
   const numColumns = 3;
-  const minBooksPerColumn = 3; // Minimum books needed per column for scrolling
+  const minBooksPerColumn = 3;
   const minTotalBooks = numColumns * minBooksPerColumn;
+
+  // Calculate animation duration based on number of books
+  const getAnimationDuration = () => {
+    const booksPerColumn = Math.ceil(coverUrls.length / numColumns);
+    // Base duration of 20s for minimum books, add 5s for each additional book
+    const duration = Math.max(
+      20,
+      20 + (booksPerColumn - minBooksPerColumn) * 1
+    );
+    return `${duration}s`;
+  };
 
   // If we don't have enough books for a good scrolling effect, show static grid
   if (coverUrls.length < minTotalBooks) {
@@ -77,6 +88,7 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
                 flexDirection: "column",
                 gap: "1rem",
                 transform: "translateZ(0)",
+                animationDuration: getAnimationDuration(),
               }}
             >
               {getColumnBooks(index).map((coverUrl, imgIndex) => (

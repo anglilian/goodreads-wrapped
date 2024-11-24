@@ -7,7 +7,7 @@ export default function BackgroundLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative min-h-screen flex items-center justify-center">
+    <div className="relative min-h-[100dvh] flex items-center justify-center">
       <BackgroundContainer />
       <div className="relative z-10">{children}</div>
     </div>

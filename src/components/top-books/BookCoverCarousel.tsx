@@ -25,12 +25,26 @@ const BookCoverCarousel = ({ coverUrls }: BookCoverCarouselProps) => {
 
   const duplicatedBooks = [...coverUrls, ...coverUrls];
 
+  // Calculate animation duration based on number of books
+  // Base duration of 10s for 3 books, add 2s for each additional book
+  const getAnimationDuration = () => {
+    const baseDuration = 10;
+    const durationPerBook = 2;
+    const duration = baseDuration + (coverUrls.length - 3) * durationPerBook;
+    return `${duration}s`;
+  };
+
   return (
-    <div className="relative overflow-hidden max-w-96">
+    <div className="relative overflow-hidden w-full max-auto max-w-96">
       {/* Left fade overlay */}
       <div className="absolute left-0 top-0 h-full w-2 bg-gradient-to-r from-background to-transparent z-10" />
 
-      <div className="horizontal-scroll">
+      <div
+        className="horizontal-scroll"
+        style={{
+          animationDuration: getAnimationDuration(),
+        }}
+      >
         {duplicatedBooks.map((url, index) => (
           <div key={`${url}-${index}`} className="flex-shrink-0">
             <img

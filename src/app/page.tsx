@@ -27,7 +27,7 @@ export default function WelcomePage() {
 
   return (
     <main>
-      <div className="flex-1 flex flex-col items-center justify-center min-h-screen gap-y-2">
+      <div className="flex-1 flex flex-col items-center justify-center min-h-[100dvh] gap-y-2">
         <div className="text-center space-y-2 mb-8">
           <h1>{currentYear}</h1>
           <h3>Goodreads Wrapped</h3>

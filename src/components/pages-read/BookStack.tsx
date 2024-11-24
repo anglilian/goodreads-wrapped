@@ -60,7 +60,7 @@ export default function BookStack({ books, maxPages }: BookStackProps) {
 
   return (
     <div
-      className="relative w-32"
+      className="relative w-28 max-w-28"
       style={{
         height: `${totalStackHeight}px`,
         filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.2))",

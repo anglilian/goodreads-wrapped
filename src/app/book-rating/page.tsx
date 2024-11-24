@@ -50,7 +50,7 @@ export default function BookRating() {
 
   return (
     <div className="page-container">
-      <h2>You {getRatingMessage()} what you read</h2>
+      <h2 className="text-center">You {getRatingMessage()} what you read</h2>
 
       {/* Rating bars container */}
       <div className="flex justify-center items-end gap-2 w-full max-w-xl mt-4">

@@ -20,7 +20,7 @@ export default function StartPage() {
 
   return (
     <div className="page-container bg-background/90 w-screen">
-      <div className="flex flex-col items-center text-center gap-1">
+      <div className="flex flex-col items-center justify-center text-center gap-1">
         <h3>Your</h3>
         <h1>{currentYear}</h1>
         <h3> in Books</h3>

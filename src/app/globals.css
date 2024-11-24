@@ -80,7 +80,7 @@
 .column {
   position: relative;
   overflow: hidden;
-  height: 100%;
+  @apply flex-1 h-screen;
 }
 
 .column .vertical-scroll {
@@ -92,11 +92,11 @@
 }
 
 .column:nth-child(2) .vertical-scroll {
-  animation-delay: -5s;
+  animation-delay: -7s;
 }
 
 .column:nth-child(3) .vertical-scroll {
-  animation-delay: -10s;
+  animation-delay: -15s;
 }
 
 .column img {

@@ -6,10 +6,61 @@ interface BookBackgroundProps {
 
 const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
   const numColumns = 3;
+  const minBooksPerColumn = 3; // Minimum books needed per column for scrolling
+  const minTotalBooks = numColumns * minBooksPerColumn;
 
+  // If we don't have enough books for a good scrolling effect, show static grid
+  if (coverUrls.length < minTotalBooks) {
+    // Create an array of 12 items (3x4 grid) by repeating the coverUrls as needed
+    const repeatedCovers = Array.from(
+      { length: 12 },
+      (_, i) => coverUrls[i % coverUrls.length]
+    );
+
+    return (
+      <div className="fixed inset-0 -z-10 overflow-hidden flex justify-center p-2">
+        <div className="w-full max-w-2xl">
+          <div
+            className="grid grid-cols-3 gap-4 auto-rows-max mx-auto"
+            style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
+          >
+            {repeatedCovers.map((coverUrl, index) => (
+              <div key={index} className="aspect-[2/3] w-full">
+                <img
+                  src={coverUrl}
+                  alt="Book cover"
+                  className="w-full h-full object-cover rounded-md shadow-md"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Add this function to get books for each column with equal lengths
   const getColumnBooks = (columnIndex: number) => {
-    // Ensure even distribution by taking every nth item where n is numColumns
-    return coverUrls.filter((_, i) => i % numColumns === columnIndex);
+    const columnBooks = coverUrls.filter(
+      (_, i) => i % numColumns === columnIndex
+    );
+    // Find the maximum length among all columns
+    const maxLength = Math.max(
+      ...Array.from(
+        { length: numColumns },
+        (_, i) => coverUrls.filter((_, j) => j % numColumns === i).length
+      )
+    );
+
+    // Pad shorter columns by repeating books
+    while (columnBooks.length < maxLength) {
+      columnBooks.push(...columnBooks.slice(0, maxLength - columnBooks.length));
+    }
+
+    let duplicatedColumnBooks = [...columnBooks, ...columnBooks];
+
+    return duplicatedColumnBooks;
   };
 
   return (
@@ -25,23 +76,11 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "1rem",
-                transform: "translateZ(0)", // Force GPU acceleration
+                transform: "translateZ(0)",
               }}
             >
-              {/* Original set of books */}
               {getColumnBooks(index).map((coverUrl, imgIndex) => (
                 <div key={imgIndex} className="aspect-[2/3]">
-                  <img
-                    src={coverUrl}
-                    alt="Book cover"
-                    className="w-full h-full object-cover rounded-md shadow-md"
-                    loading="lazy"
-                  />
-                </div>
-              ))}
-              {/* Duplicate set for seamless scrolling */}
-              {getColumnBooks(index).map((coverUrl, imgIndex) => (
-                <div key={`duplicate-${imgIndex}`} className="aspect-[2/3]">
                   <img
                     src={coverUrl}
                     alt="Book cover"

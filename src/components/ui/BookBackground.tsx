@@ -29,7 +29,7 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
     );
 
     return (
-      <div className="fixed inset-0 -z-10 overflow-hidden flex justify-center p-2">
+      <div className="fixed inset-0 -z-10 overflow-hidden flex justify-center">
         <div className="w-full max-w-2xl">
           <div
             className="grid grid-cols-3 gap-4 auto-rows-max mx-auto"

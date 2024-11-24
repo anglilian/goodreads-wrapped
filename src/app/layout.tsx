@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     description: "Visualize your year in books with Goodreads Wrapped",
     url: "https://goodreads-wrapped.anglilian.com",
     siteName: "Goodreads Wrapped",
-    // images: [
-    //   {
-    //     url: "/og-image.png",
-    //     width: 1200,
-    //     height: 630,
-    //   },
-    // ],
+    images: [
+      {
+        url: "/favicon/favicon/og-image.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
     locale: "en_US",
     type: "website",
   },

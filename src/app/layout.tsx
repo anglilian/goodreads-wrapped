@@ -18,10 +18,23 @@ const merriweather = Merriweather({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://goodreads-wrapped.anglilian.com"),
   title: "Goodreads Wrapped",
   description: "Visualise your year in books",
   keywords: ["books", "reading", "goodreads", "wrapped", "year in review"],
   authors: [{ name: "Ang Li-Lian", url: "https://anglilian.com" }],
+  icons: {
+    icon: [
+      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon/favicon.ico" },
+    ],
+    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180" }],
+  },
+  manifest: "/favicon/site.webmanifest",
+  appleWebApp: {
+    title: "Goodreads Wrapped",
+  },
   openGraph: {
     title: "Goodreads Wrapped",
     description: "Visualize your year in books with Goodreads Wrapped",
@@ -29,7 +42,7 @@ export const metadata: Metadata = {
     siteName: "Goodreads Wrapped",
     // images: [
     //   {
-    //     url: "/og-image.png", // Add an og-image.png to your public folder
+    //     url: "/og-image.png",
     //     width: 1200,
     //     height: 630,
     //   },

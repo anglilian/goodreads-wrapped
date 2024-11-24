@@ -1,18 +1,19 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, HelpCircle } from "lucide-react";
 import CSVUploader from "@/components/app/CSVUploader";
 import Loader from "@/components/app/Loader";
 import { useBookData } from "@/hooks/useBookData";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { mockBooks } from "@/tests/testData";
-
+import HelpModal from "@/components/app/HelpModal";
 export default function WelcomePage() {
   const currentYear = new Date().getFullYear();
   const { books, isLoading, setProcessedBooks } = useBookData();
   const router = useRouter();
+  const [showHelpPopup, setShowHelpPopup] = useState(false);
 
   const handleUseDemoData = () => {
     setProcessedBooks(mockBooks);
@@ -50,19 +51,19 @@ export default function WelcomePage() {
                       <ExternalLink className="w-4 h-4" />
                     </button>
                   </a>
-                  <a
-                    href="https://help.goodreads.com/s/article/How-do-I-import-or-export-my-books-1553870934590#:~:text=To%20Export%20your%20books%20to%20a%20.csv%20file"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => setShowHelpPopup(true)}
+                    className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
                   >
+                    <HelpCircle className="w-4 h-4" />
                     Need help?
-                  </a>
+                  </button>
                 </div>
               </div>
               <div className="flex flex-col gap-2 ">
                 <p className="font-bold text-center">Step 2</p>
                 <CSVUploader />
-                <button onClick={handleUseDemoData} className="btn-primary">
+                <button onClick={handleUseDemoData} className="btn-secondary">
                   Use demo data
                 </button>
               </div>
@@ -83,6 +84,11 @@ export default function WelcomePage() {
           />
         </div>
       </div>
+
+      <HelpModal
+        isOpen={showHelpPopup}
+        onClose={() => setShowHelpPopup(false)}
+      />
     </main>
   );
 }

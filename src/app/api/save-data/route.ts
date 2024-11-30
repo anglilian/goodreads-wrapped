@@ -5,23 +5,21 @@ import { nanoid } from "nanoid";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { name, bookData } = body;
+    const { name, bookData = {} } = await request.json();
 
-    if (!name || !bookData) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+    if (!name) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
     }
 
-    const readingDataId = nanoid(10);
-    await db.insert(readingData).values({
-      id: readingDataId,
-      name,
-      books: bookData.books,
-      genreAnalysis: bookData.genreAnalysis || null,
-    });
+    const [readingDataId] = await Promise.all([
+      Promise.resolve(nanoid(10)),
+      db.insert(readingData).values({
+        id: nanoid(10),
+        name,
+        books: bookData.books || [],
+        genreAnalysis: bookData.genreAnalysis || null,
+      }),
+    ]);
 
     return NextResponse.json({ success: true, id: readingDataId });
   } catch (error) {

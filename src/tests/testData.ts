@@ -179,3 +179,13 @@ export const mockBooks: Book[] = [
     coverUrl: "https://covers.openlibrary.org/b/isbn/1250280915-M.jpg",
   },
 ];
+
+export const mockGenreAnalysis = {
+  genre: "professional development",
+  isbns: [
+    "0988262592", // The Phoenix Project
+    "0884271781", // The Goal
+    "9781118960875", // The Lean Product Playbook
+    "1736633309", // Continuous Discovery Habits
+  ],
+};

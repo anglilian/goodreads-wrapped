@@ -6,6 +6,8 @@ import { Home, RotateCcw, Share2 } from "lucide-react";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 import Confetti from "react-confetti";
 import ShareModal from "@/components/summary/ShareModal";
+import { StatsCard } from "@/components/summary/StatsCard";
+import { ActionButton } from "@/components/summary/ActionButton";
 
 export default function Summary() {
   const { books, genreAnalysis, sharedBy, clearBooks } = useBookData();
@@ -82,7 +84,7 @@ export default function Summary() {
           </div>
 
           {genreAnalysis?.genre && (
-            <StatsCard value={genreAnalysis.genre} label="top genre" />
+            <StatsCard value={genreAnalysis.genre} label="top genre" reversed />
           )}
         </div>
 
@@ -117,35 +119,3 @@ export default function Summary() {
     </div>
   );
 }
-
-// Helper Components
-const StatsCard = ({
-  value,
-  label,
-}: {
-  value: string | number;
-  label: string;
-}) => (
-  <div className="text-center space-y-2 bg-secondary-button bg-opacity-40 rounded-lg p-4">
-    <h2 className="text-secondary">{value}</h2>
-    <h5>{label}</h5>
-  </div>
-);
-
-const ActionButton = ({
-  onClick,
-  icon,
-  label,
-}: {
-  onClick: () => void;
-  icon: React.ReactNode;
-  label: string;
-}) => (
-  <button
-    onClick={onClick}
-    className="btn-primary inline-flex items-center gap-2"
-  >
-    {React.cloneElement(icon as React.ReactElement, { className: "w-4 h-4" })}
-    {label}
-  </button>
-);

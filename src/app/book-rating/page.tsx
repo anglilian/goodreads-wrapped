@@ -50,7 +50,7 @@ export default function BookRating() {
 
   return (
     <div className="page-container">
-      <h2 className="text-center">
+      <h2 className="text-center max-w-md">
         {sharedBy ? (
           <>
             {sharedBy} {getRatingMessage()} what they read
@@ -89,7 +89,7 @@ export default function BookRating() {
         })}
       </div>
 
-      {averageRating >= 4 && (
+      {averageRating >= 4 && !sharedBy && (
         <h4 className="text-center">You sure know how to pick them!</h4>
       )}
 

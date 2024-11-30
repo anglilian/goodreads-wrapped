@@ -7,12 +7,18 @@ import { useBookData } from "@/hooks/useBookData";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { mockBooks } from "@/tests/testData";
+import { mockBooks, mockGenreAnalysis } from "@/tests/testData";
 import HelpModal from "@/components/app/HelpModal";
 
 export default function WelcomePage() {
   const currentYear = new Date().getFullYear();
-  const { books, isLoading, setProcessedBooks, loadSharedData } = useBookData();
+  const {
+    books,
+    isLoading,
+    setProcessedBooks,
+    loadSharedData,
+    setGenreAnalysis,
+  } = useBookData();
   const router = useRouter();
   const searchParams = useSearchParams();
   const readerId = searchParams.get("id");
@@ -27,6 +33,7 @@ export default function WelcomePage() {
 
   const handleUseDemoData = () => {
     setProcessedBooks(mockBooks);
+    setGenreAnalysis(mockGenreAnalysis);
   };
 
   useEffect(() => {

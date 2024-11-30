@@ -12,6 +12,26 @@ export default function Summary() {
   const router = useRouter();
   const [showConfetti, setShowConfetti] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    // Set initial dimensions
+    setDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
+    // Optional: Add resize handler if needed
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const currentYear = new Date().getFullYear();
 
@@ -42,8 +62,8 @@ export default function Summary() {
     <div className="page-container">
       {showConfetti && (
         <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
+          width={dimensions.width}
+          height={dimensions.height}
           recycle={false}
         />
       )}

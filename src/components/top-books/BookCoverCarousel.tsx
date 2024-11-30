@@ -17,7 +17,8 @@ const BookCoverCarousel = ({ books }: BookCoverCarouselProps) => {
           <div key={index} className="flex-shrink-0">
             <img
               src={book.coverUrl}
-              alt="Book cover"
+              alt={`${book.title} by ${book.author}`}
+              title={`${book.title} by ${book.author}`}
               className="h-48 w-32 object-cover rounded-md shadow-md"
               loading="lazy"
             />
@@ -53,7 +54,8 @@ const BookCoverCarousel = ({ books }: BookCoverCarouselProps) => {
           <div key={`${book.coverUrl}-${index}`} className="flex-shrink-0">
             <img
               src={book.coverUrl}
-              alt="Book cover"
+              alt={`${book.title} by ${book.author}`}
+              title={`${book.title} by ${book.author}`}
               className="h-52 w-36 object-cover rounded-md shadow-md"
               loading="lazy"
             />

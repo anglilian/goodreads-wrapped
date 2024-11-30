@@ -52,7 +52,7 @@ function WelcomePageContent() {
       <main>
         <div className="flex-1 flex flex-col items-center justify-center min-h-[100dvh] gap-y-4">
           <div className="text-center space-y-2">
-            <h3 className="text-red-600">{error}</h3>
+            <h5 className="text-red-600">{error}</h5>
             <button
               onClick={() => router.push("/")}
               className="btn-primary mt-4"

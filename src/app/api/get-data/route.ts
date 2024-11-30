@@ -2,9 +2,22 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { readingData } from "@/lib/schema";
 import { eq } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 
 export async function GET(request: Request) {
   try {
+    // Add connection test
+    try {
+      await db.execute(sql`SELECT 1`);
+      console.log("Database connection successful");
+    } catch (e) {
+      console.error("Database connection failed:", e);
+      return NextResponse.json(
+        { error: "Database connection failed" },
+        { status: 500 }
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const readerId = searchParams.get("reader_id");
 

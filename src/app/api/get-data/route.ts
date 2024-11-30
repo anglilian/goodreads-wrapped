@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const readerId = searchParams.get("reader_id");
+    const readerId = searchParams.get("id");
 
     if (!readerId) {
       return NextResponse.json(

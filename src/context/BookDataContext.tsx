@@ -61,6 +61,14 @@ export function BookDataProvider({
         (book) => book.dateRead.getFullYear() === currentYear
       );
 
+      if (booksThisYear.length === 0) {
+        setError(
+          `Seems like there aren't any books read in ${currentYear}. You can add books by setting "Date Read" for each book on your Goodreads book list to any time in ${currentYear}.`
+        );
+        setIsLoading(false);
+        return;
+      }
+
       // Separate books with and without ISBNs (only for current year)
       const booksWithISBN = booksThisYear.filter((book) => book.isbn !== "");
       const booksWithoutISBN = booksThisYear.filter((book) => book.isbn === "");
@@ -144,7 +152,11 @@ export function BookDataProvider({
       // Store all books
       setBooks(allProcessedBooks);
     } catch (err) {
-      setError("Error processing books data");
+      setError(
+        err instanceof Error
+          ? `Error processing books: ${err.message}`
+          : "An unexpected error occurred while processing your books. Please try again."
+      );
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -166,7 +178,9 @@ export function BookDataProvider({
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to load shared data");
+        throw new Error(
+          data.error || "Failed to load shared data. Please try again."
+        );
       }
 
       const processedBooks = data.books.map((book: any) => ({
@@ -179,9 +193,11 @@ export function BookDataProvider({
       setSharedBy(data.userName);
     } catch (err) {
       setError(
-        err instanceof Error ? err.message : "Failed to load shared data"
+        err instanceof Error
+          ? `Failed to load shared data: ${err.message}`
+          : "An unexpected error occurred while loading shared data. Please try again."
       );
-      throw err; // Let the component handle the error
+      throw err;
     } finally {
       setIsLoading(false);
     }

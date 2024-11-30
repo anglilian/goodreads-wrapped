@@ -43,25 +43,6 @@ function WelcomePageContent() {
     setGenreAnalysis(mockGenreAnalysis);
   };
 
-  // Show error message if present
-  if (error) {
-    return (
-      <main>
-        <div className="flex-1 flex flex-col items-center justify-center min-h-[100dvh] gap-y-4">
-          <div className="text-center space-y-2">
-            <h5 className="text-red-600">{error}</h5>
-            <button
-              onClick={() => router.push("/")}
-              className="btn-primary mt-4"
-            >
-              Return Home
-            </button>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main>
       <div className="flex-1 flex flex-col items-center justify-center min-h-[100dvh] gap-y-2">

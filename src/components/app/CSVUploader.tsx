@@ -7,7 +7,7 @@ import { useBookData } from "@/hooks/useBookData";
 import { useState } from "react";
 
 export default function CSVUploader() {
-  const { processBooks, isLoading, error: contextError } = useBookData();
+  const { processBooks, error: contextError } = useBookData();
   const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,10 +58,12 @@ export default function CSVUploader() {
         processBooks(results.data as RawBook[]);
       },
       error: (error) => {
-        setError(`Error parsing CSV: ${error.message}`);
+        setError(`Error parsing CSV: ${error.message}. Please try again.`);
       },
     });
   };
+
+  const displayError = error || contextError;
 
   return (
     <div className="space-y-4 lg:max-w-80">
@@ -78,9 +80,9 @@ export default function CSVUploader() {
         />
       </label>
 
-      {(error || contextError) && (
+      {displayError && (
         <div className="p-4 mt-4 text-red-800 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm">{error}</p>
+          <p className="text-sm">{displayError}</p>
         </div>
       )}
     </div>

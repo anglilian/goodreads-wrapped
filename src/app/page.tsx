@@ -6,12 +6,11 @@ import Loader from "@/components/app/Loader";
 import { useBookData } from "@/hooks/useBookData";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { mockBooks, mockGenreAnalysis } from "@/tests/testData";
 import HelpModal from "@/components/app/HelpModal";
 
-// Create a separate component for the content that uses useSearchParams
-function WelcomePageContent() {
+export default function WelcomePage() {
   const currentYear = new Date().getFullYear();
   const {
     books,
@@ -28,19 +27,15 @@ function WelcomePageContent() {
   useEffect(() => {
     if (readerId) {
       loadSharedData(readerId);
+    } else if (!isLoading && books.length > 0) {
+      router.push("/start");
     }
-  }, [readerId, loadSharedData]);
+  }, [readerId, loadSharedData, books.length, isLoading, router]);
 
   const handleUseDemoData = () => {
     setProcessedBooks(mockBooks);
     setGenreAnalysis(mockGenreAnalysis);
   };
-
-  useEffect(() => {
-    if (!isLoading && books.length > 0) {
-      router.push("/start");
-    }
-  }, [books.length, isLoading, router]);
 
   return (
     <main>
@@ -107,14 +102,5 @@ function WelcomePageContent() {
         onClose={() => setShowHelpPopup(false)}
       />
     </main>
-  );
-}
-
-// Main page component with Suspense
-export default function WelcomePage() {
-  return (
-    <Suspense fallback={<Loader />}>
-      <WelcomePageContent />
-    </Suspense>
   );
 }

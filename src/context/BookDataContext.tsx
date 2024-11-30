@@ -61,10 +61,6 @@ export function BookDataProvider({
     }
   }, [books]);
 
-  const setProcessedBooks = (processedBooks: Book[]) => {
-    setBooks(processedBooks);
-  };
-
   const processBooks = async (rawBooks: RawBook[]) => {
     setIsLoading(true);
     setError(null);

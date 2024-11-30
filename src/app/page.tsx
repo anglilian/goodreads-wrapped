@@ -19,6 +19,7 @@ function WelcomePageContent() {
     setProcessedBooks,
     loadSharedData,
     setGenreAnalysis,
+    clearBooks,
   } = useBookData();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -28,6 +29,7 @@ function WelcomePageContent() {
 
   useEffect(() => {
     if (readerId) {
+      clearBooks();
       loadSharedData(readerId);
     } else if (!isLoading && books.length > 0) {
       router.push("/start");

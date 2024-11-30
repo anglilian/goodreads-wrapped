@@ -6,11 +6,12 @@ import Loader from "@/components/app/Loader";
 import { useBookData } from "@/hooks/useBookData";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { mockBooks, mockGenreAnalysis } from "@/tests/testData";
 import HelpModal from "@/components/app/HelpModal";
 
-export default function WelcomePage() {
+// Create a separate component for the content that uses useSearchParams
+function WelcomePageContent() {
   const currentYear = new Date().getFullYear();
   const {
     books,
@@ -25,7 +26,6 @@ export default function WelcomePage() {
   const [showHelpPopup, setShowHelpPopup] = useState(false);
 
   useEffect(() => {
-    // If there's a reader_id, try to load the shared data
     if (readerId) {
       loadSharedData(readerId);
     }
@@ -107,5 +107,14 @@ export default function WelcomePage() {
         onClose={() => setShowHelpPopup(false)}
       />
     </main>
+  );
+}
+
+// Main page component with Suspense
+export default function WelcomePage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <WelcomePageContent />
+    </Suspense>
   );
 }

@@ -3,6 +3,7 @@ import { useBookData } from "@/hooks/useBookData";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 import Ratings from "@/components/top-books/Ratings";
 import EmojiButton from "@/components/ui/EmojiButton";
+import { useRouter } from "next/navigation";
 
 export default function BookRating() {
   const { books, sharedBy } = useBookData();
@@ -10,6 +11,13 @@ export default function BookRating() {
   const thisYearBooks = books.filter(
     (book) => book.dateRead?.getFullYear() === currentYear && book.rating
   );
+
+  // Add this effect to handle navigation
+  if (thisYearBooks.length === 0) {
+    const router = useRouter();
+    router.push("/pages-read"); // Replace with your actual next page route
+    return null;
+  }
 
   const averageRating =
     thisYearBooks.length > 0

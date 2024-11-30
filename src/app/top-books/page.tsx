@@ -28,7 +28,8 @@ export default function TopBooks() {
         <BookCoverCarousel books={fiveStarBooks} />
         <h2>
           {sharedBy ? `${sharedBy} ` : "You "}
-          <span className="text-secondary italic">really</span> loved them
+          <span className="text-secondary italic">really</span>{" "}
+          {`loved ${fiveStarBooks.length === 1 ? "it" : "them"}`}
         </h2>
         <Ratings rating={5} />
         <EmojiButton emoji="🥰" />
@@ -53,7 +54,10 @@ export default function TopBooks() {
           list
         </h2>
         <BookCoverCarousel books={fourStarBooks} />
-        <h4>But these came close...</h4>
+        <h4>
+          But {fourStarBooks.length === 1 ? "this one came" : "these came"}{" "}
+          close...
+        </h4>
         <Ratings rating={4} />
         <EmojiButton emoji="🥰" />
         <NavigationButtons />

@@ -25,25 +25,18 @@ function WelcomePageContent() {
   const searchParams = useSearchParams();
   const readerId = searchParams.get("id");
   const [showHelpPopup, setShowHelpPopup] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
-    if (readerId) {
-      clearBooks();
-      loadSharedData(readerId).catch((error) => {
-        console.error("Failed to load shared data:", error);
-      });
-    } else if (!isLoading && books.length > 0) {
-      router.push("/start");
-    }
-    setIsInitialLoad(false);
-  }, [readerId, loadSharedData, books.length, isLoading, router]);
+    if (!readerId) return;
 
-  const shouldShowLoader =
-    isInitialLoad ||
-    isLoading ||
-    (readerId && books.length === 0) ||
-    (!readerId && books.length > 0);
+    clearBooks();
+    loadSharedData(readerId).catch((error) => {
+      console.error("Failed to load shared data:", error);
+      router.push("/");
+    });
+  }, [readerId]);
+
+  const shouldShowLoader = isLoading || (readerId && books.length === 0);
 
   const handleUseDemoData = () => {
     setProcessedBooks(mockBooks);

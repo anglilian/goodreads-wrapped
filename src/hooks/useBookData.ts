@@ -9,15 +9,19 @@ export function useBookData(): BookDataContextType {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Skip redirect for these paths and when loading
-    const allowedPaths = ["/"];
-    if (
-      !context ||
-      (!context.books.length &&
-        !allowedPaths.includes(pathname) &&
-        !context.isLoading)
-    ) {
+    if (!context) return;
+
+    // Only redirect if we're not on the home page
+    if (pathname !== "/" && !context.books.length && !context.isLoading) {
       router.push("/");
+    }
+    // Redirect to start if we have books and we're on home page
+    else if (
+      pathname === "/" &&
+      context.books.length > 0 &&
+      !context.isLoading
+    ) {
+      router.push("/start");
     }
   }, [context, pathname, router]);
 

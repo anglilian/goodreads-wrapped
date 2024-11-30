@@ -149,20 +149,13 @@ export function BookDataProvider({
     setError(null);
 
     try {
-      // Add delay to ensure loading state is set
-      await new Promise((resolve) => setTimeout(resolve, 0));
-
       const response = await fetch(`/api/get-data?id=${readerId}`);
       const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error("This shared reading data is no longer available");
-        }
         throw new Error(data.error || "Failed to load shared data");
       }
 
-      // Only need to reconstruct Date objects, no other processing needed
       const processedBooks = data.books.map((book: any) => ({
         ...book,
         dateRead: new Date(book.dateRead),
@@ -175,9 +168,7 @@ export function BookDataProvider({
       setError(
         err instanceof Error ? err.message : "Failed to load shared data"
       );
-      console.error("Error loading shared data:", err);
-      // Optionally redirect to home after error
-      router.push("/");
+      throw err; // Let the component handle the error
     } finally {
       setIsLoading(false);
     }

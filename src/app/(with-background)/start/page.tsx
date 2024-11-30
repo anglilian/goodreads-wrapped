@@ -7,7 +7,7 @@ import { useBookData } from "@/hooks/useBookData";
 export default function StartPage() {
   const currentYear = new Date().getFullYear();
   const router = useRouter();
-  const { clearBooks } = useBookData();
+  const { clearBooks, sharedBy } = useBookData();
 
   const handleStart = async () => {
     await router.push("/books-read");
@@ -21,7 +21,7 @@ export default function StartPage() {
   return (
     <div className="page-container bg-background/90">
       <div className="flex flex-col items-center justify-center text-center gap-1">
-        <h3>Your</h3>
+        <h3>{sharedBy ? `${sharedBy}'s` : "Your"}</h3>
         <h1>{currentYear}</h1>
         <h3> in Books</h3>
       </div>

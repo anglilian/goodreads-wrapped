@@ -18,24 +18,20 @@ export interface Book {
   coverUrl?: string;
 }
 
-// export interface BookAnalytics {
-//   ratingCounts: {
-//     [rating: number]: number;
-//   };
-//   topRatedBooks?: Book[];
-//   totalBooks: number;
-//   totalPages: number;
-//   topGenre?: string;
-//   topGenreBooks?: Book[];
-//   totalBooksPrevious: number;
-//   booksRead: Book[];
-// }
-
 export interface BookDataContextType {
   books: Book[];
   isLoading: boolean;
   error: string | null;
-  processBooks: (rawBooks: RawBook[]) => void;
-  setProcessedBooks: (processedBooks: Book[]) => void;
+  processBooks: (rawBooks: RawBook[]) => Promise<void>;
+  setProcessedBooks: (books: Book[]) => void;
   clearBooks: () => void;
+  genreAnalysis: {
+    genre: string;
+    isbns: string[];
+  } | null;
+  setGenreAnalysis: (
+    analysis: { genre: string; isbns: string[] } | null
+  ) => void;
+  loadSharedData: (readerId: string) => Promise<void>;
+  sharedBy: string | null;
 }

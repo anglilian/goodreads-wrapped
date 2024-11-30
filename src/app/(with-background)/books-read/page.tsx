@@ -4,7 +4,7 @@ import { useBookData } from "@/hooks/useBookData";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 
 export default function BooksRead() {
-  const { books } = useBookData();
+  const { books, sharedBy } = useBookData();
   const currentYear = new Date().getFullYear();
   const previousYear = currentYear - 1;
 
@@ -60,7 +60,7 @@ export default function BooksRead() {
   return (
     <div className="page-container">
       <div className="flex flex-col gap-4 items-center justify-center text-center bg-background p-8 rounded-md">
-        <h3>You read</h3>
+        <h3>{sharedBy ? `${sharedBy} read` : "You read"}</h3>
         <h1>{getBookCountText()}</h1>
         <h5>{getComparisonText()}</h5>
         <NavigationButtons />

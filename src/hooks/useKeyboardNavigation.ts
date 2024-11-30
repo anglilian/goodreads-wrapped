@@ -10,8 +10,7 @@ export const PAGE_ORDER = [
   "/top-books",
   "/book-rating",
   "/pages-read",
-  // "/top-genre",
-  // "/top-genre-books",
+  "/top-genre",
   "/summary",
 ] as const;
 

@@ -5,7 +5,7 @@ import Ratings from "@/components/top-books/Ratings";
 import EmojiButton from "@/components/ui/EmojiButton";
 
 export default function BookRating() {
-  const { books } = useBookData();
+  const { books, sharedBy } = useBookData();
   const currentYear = new Date().getFullYear();
   const thisYearBooks = books.filter(
     (book) => book.dateRead?.getFullYear() === currentYear && book.rating
@@ -50,7 +50,15 @@ export default function BookRating() {
 
   return (
     <div className="page-container">
-      <h2 className="text-center">You {getRatingMessage()} what you read</h2>
+      <h2 className="text-center">
+        {sharedBy ? (
+          <>
+            {sharedBy} {getRatingMessage()} what they read
+          </>
+        ) : (
+          <>You {getRatingMessage()} what you read</>
+        )}
+      </h2>
 
       {/* Rating bars container */}
       <div className="flex justify-center items-end gap-2 w-full max-w-xl mt-4">

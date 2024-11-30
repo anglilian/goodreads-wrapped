@@ -6,7 +6,7 @@ import BookStack from "@/components/pages-read/BookStack";
 import EmojiButton from "@/components/ui/EmojiButton";
 
 export default function PagesRead() {
-  const { books } = useBookData();
+  const { books, sharedBy } = useBookData();
   const currentYear = new Date().getFullYear();
   const lastYear = currentYear - 1;
 
@@ -36,7 +36,7 @@ export default function PagesRead() {
   return (
     <div className="page-container">
       <div className="text-center gap-2">
-        <h4>You read</h4>
+        <h4>{sharedBy ? `${sharedBy} read` : "You read"}</h4>
         <h1>{thisYearPages.toLocaleString()} pages</h1>
         <h5 className="mt-4">
           {"(that's "}

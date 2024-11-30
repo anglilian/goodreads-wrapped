@@ -1,7 +1,11 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
-export default function Loader() {
+interface LoaderProps {
+  customText?: string;
+}
+
+export default function Loader({ customText }: LoaderProps) {
   const [textIndex, setTextIndex] = useState(0);
 
   const loadingTexts = [
@@ -12,15 +16,16 @@ export default function Loader() {
   ];
 
   useEffect(() => {
+    if (customText) return; // Don't start interval if using custom text
+
     const intervalId = setInterval(() => {
       setTextIndex((prevIndex) =>
         prevIndex === loadingTexts.length - 1 ? 0 : prevIndex + 1
       );
-    }, 10000); // every 10 secs
+    }, 5000);
 
-    // Cleanup interval on component unmount
     return () => clearInterval(intervalId);
-  }, []);
+  }, [customText]);
 
   return (
     <div className="flex flex-col justify-center items-center space-y-2">
@@ -32,7 +37,7 @@ export default function Loader() {
         priority
       />
       <p className="transition-opacity duration-500">
-        {loadingTexts[textIndex]}
+        {customText || loadingTexts[textIndex]}
       </p>
     </div>
   );

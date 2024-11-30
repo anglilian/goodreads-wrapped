@@ -6,7 +6,7 @@ import NavigationButtons from "@/components/ui/NavigationWrapper";
 import EmojiButton from "@/components/ui/EmojiButton";
 
 export default function TopBooks() {
-  const { books } = useBookData();
+  const { books, sharedBy } = useBookData();
   const currentYear = new Date().getFullYear();
   const booksThisYear = books.filter(
     (book) => book.dateRead.getFullYear() === currentYear
@@ -19,12 +19,11 @@ export default function TopBooks() {
   if (fiveStarBooks.length > 0) {
     return (
       <div className="page-container">
-        <h2>
-          <h4>Remember these?</h4>{" "}
-        </h2>
+        <h4>{sharedBy ? `Check these out!` : "Remember these?"}</h4>
         <BookCoverCarousel coverUrls={fiveStarBooks} />
         <h2>
-          You <span className="text-secondary italic">really</span> loved them
+          {sharedBy ? `${sharedBy} ` : "You "}
+          <span className="text-secondary italic">really</span> loved them
         </h2>
         <Ratings rating={5} />
         <EmojiButton emoji="🥰" />

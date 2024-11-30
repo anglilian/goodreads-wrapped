@@ -56,6 +56,11 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
             </li>
           </ul>
         </div>
+        <div className="mt-4">
+          <p className="text-sm text-gray-500">
+            Anything else? ✉ Email me at lilianang999@gmail.com
+          </p>
+        </div>
       </div>
     </div>
   );

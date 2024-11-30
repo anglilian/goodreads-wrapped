@@ -41,8 +41,14 @@ export function BookDataProvider({
     }
     return [];
   });
+
+  const [genreAnalysis, setGenreAnalysis] = useState<{
+    genre: string;
+    isbns: string[];
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sharedBy, setSharedBy] = useState<string | null>(null);
   const { fetchMultipleBooks } = useGoogleBooksAPI();
   const { fetchMultipleCovers } = useOpenLibraryAPI();
 
@@ -62,8 +68,14 @@ export function BookDataProvider({
     setError(null);
 
     try {
-      // Process all books to get basic data and counts
-      const allProcessedBooks = rawBooks.map((book) => ({
+      // First filter for current and previous year's books
+      const filteredRawBooks = rawBooks.filter((book) => {
+        const bookYear = new Date(book["Date Read"]).getFullYear();
+        return bookYear === currentYear || bookYear === currentYear - 1;
+      });
+
+      // Process only filtered books
+      const allProcessedBooks = filteredRawBooks.map((book) => ({
         isbn: book.ISBN ? cleanISBN(book.ISBN) : "",
         rating: book["My Rating"]
           ? parseInt(book["My Rating"]) || undefined
@@ -158,20 +170,57 @@ export function BookDataProvider({
 
   const clearBooks = () => {
     setBooks([]);
+    setGenreAnalysis(null);
+    setSharedBy(null);
     localStorage.removeItem(STORAGE_KEY);
   };
 
+  const loadSharedData = async (readerId: string) => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/get-data?reader_id=${readerId}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to load shared data");
+      }
+
+      // Only need to reconstruct Date objects, no other processing needed
+      const processedBooks = data.books.map((book: any) => ({
+        ...book,
+        dateRead: new Date(book.dateRead),
+      }));
+
+      setBooks(processedBooks);
+      setGenreAnalysis(data.genreAnalysis);
+      setSharedBy(data.userName);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to load shared data"
+      );
+      console.error("Error loading shared data:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const value = {
+    books,
+    isLoading,
+    error,
+    processBooks,
+    setProcessedBooks: setBooks,
+    clearBooks,
+    genreAnalysis,
+    setGenreAnalysis,
+    loadSharedData,
+    sharedBy,
+  };
+
   return (
-    <BookDataContext.Provider
-      value={{
-        books,
-        isLoading,
-        error,
-        processBooks,
-        setProcessedBooks,
-        clearBooks,
-      }}
-    >
+    <BookDataContext.Provider value={value}>
       {children}
     </BookDataContext.Provider>
   );

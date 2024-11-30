@@ -30,7 +30,9 @@ function WelcomePageContent() {
   useEffect(() => {
     if (readerId) {
       clearBooks();
-      loadSharedData(readerId);
+      loadSharedData(readerId).catch((error) => {
+        console.error("Failed to load shared data:", error);
+      });
     } else if (!isLoading && books.length > 0) {
       router.push("/start");
     }

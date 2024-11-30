@@ -9,11 +9,13 @@ export function useBookData(): BookDataContextType {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Skip redirect for these paths
+    // Skip redirect for these paths and when loading
     const allowedPaths = ["/"];
     if (
       !context ||
-      (!context.books.length && !allowedPaths.includes(pathname))
+      (!context.books.length &&
+        !allowedPaths.includes(pathname) &&
+        !context.isLoading)
     ) {
       router.push("/");
     }

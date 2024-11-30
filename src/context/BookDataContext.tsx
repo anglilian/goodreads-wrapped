@@ -149,6 +149,9 @@ export function BookDataProvider({
     setError(null);
 
     try {
+      // Add delay to ensure loading state is set
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       const response = await fetch(`/api/get-data?id=${readerId}`);
       const data = await response.json();
 

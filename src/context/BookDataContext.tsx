@@ -3,6 +3,7 @@ import { createContext, useState, ReactNode, useEffect } from "react";
 import { BookDataContextType, Book, RawBook } from "@/types/books";
 import { useGoogleBooksAPI } from "@/hooks/useGoogleBooksAPI";
 import { useOpenLibraryAPI } from "@/hooks/useOpenLibraryAPI";
+import { useRouter } from "next/navigation";
 
 export const BookDataContext = createContext<BookDataContextType | undefined>(
   undefined
@@ -51,6 +52,7 @@ export function BookDataProvider({
   const [sharedBy, setSharedBy] = useState<string | null>(null);
   const { fetchMultipleBooks } = useGoogleBooksAPI();
   const { fetchMultipleCovers } = useOpenLibraryAPI();
+  const router = useRouter();
 
   // Save to localStorage whenever books change
   useEffect(() => {
@@ -184,6 +186,9 @@ export function BookDataProvider({
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("This shared reading data is no longer available");
+        }
         throw new Error(data.error || "Failed to load shared data");
       }
 
@@ -201,6 +206,8 @@ export function BookDataProvider({
         err instanceof Error ? err.message : "Failed to load shared data"
       );
       console.error("Error loading shared data:", err);
+      // Optionally redirect to home after error
+      router.push("/");
     } finally {
       setIsLoading(false);
     }

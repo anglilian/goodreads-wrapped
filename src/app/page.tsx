@@ -15,6 +15,7 @@ function WelcomePageContent() {
   const {
     books,
     isLoading,
+    error,
     setProcessedBooks,
     loadSharedData,
     setGenreAnalysis,
@@ -23,6 +24,7 @@ function WelcomePageContent() {
   const searchParams = useSearchParams();
   const readerId = searchParams.get("id");
   const [showHelpPopup, setShowHelpPopup] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   useEffect(() => {
     if (readerId) {
@@ -30,12 +32,38 @@ function WelcomePageContent() {
     } else if (!isLoading && books.length > 0) {
       router.push("/start");
     }
+    setIsInitialLoad(false);
   }, [readerId, loadSharedData, books.length, isLoading, router]);
+
+  const shouldShowLoader =
+    isInitialLoad ||
+    isLoading ||
+    (readerId && books.length === 0) ||
+    (!readerId && books.length > 0);
 
   const handleUseDemoData = () => {
     setProcessedBooks(mockBooks);
     setGenreAnalysis(mockGenreAnalysis);
   };
+
+  // Show error message if present
+  if (error) {
+    return (
+      <main>
+        <div className="flex-1 flex flex-col items-center justify-center min-h-[100dvh] gap-y-4">
+          <div className="text-center space-y-2">
+            <h3 className="text-red-600">{error}</h3>
+            <button
+              onClick={() => router.push("/")}
+              className="btn-primary mt-4"
+            >
+              Return Home
+            </button>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main>
@@ -45,7 +73,7 @@ function WelcomePageContent() {
           <h3>Goodreads Wrapped</h3>
         </div>
 
-        {isLoading ? (
+        {shouldShowLoader ? (
           <Loader />
         ) : (
           <div className="text-center">

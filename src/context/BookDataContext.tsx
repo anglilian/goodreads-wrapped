@@ -1,9 +1,8 @@
 "use client";
-import { createContext, useState, ReactNode, useEffect } from "react";
+import { createContext, useState, ReactNode } from "react";
 import { BookDataContextType, Book, RawBook } from "@/types/books";
 import { useGoogleBooksAPI } from "@/hooks/useGoogleBooksAPI";
 import { useOpenLibraryAPI } from "@/hooks/useOpenLibraryAPI";
-import { useRouter } from "next/navigation";
 
 export const BookDataContext = createContext<BookDataContextType | undefined>(
   undefined
@@ -31,7 +30,6 @@ export function BookDataProvider({
   const [sharedBy, setSharedBy] = useState<string | null>(null);
   const { fetchMultipleBooks } = useGoogleBooksAPI();
   const { fetchMultipleCovers } = useOpenLibraryAPI();
-  const router = useRouter();
 
   const processBooks = async (rawBooks: RawBook[]) => {
     setIsLoading(true);
@@ -67,68 +65,83 @@ export function BookDataProvider({
       const booksWithISBN = booksThisYear.filter((book) => book.isbn !== "");
       const booksWithoutISBN = booksThisYear.filter((book) => book.isbn === "");
 
-      // Remove duplicate block and keep only one instance of OpenLibrary cover fetching
-      if (booksWithISBN.length > 0) {
-        const openLibraryCoverUrls = await fetchMultipleCovers(
-          booksWithISBN.map((book) => book.isbn)
-        );
+      // Process both groups in parallel
+      await Promise.all([
+        // Process books with ISBN through Google Books first
+        (async () => {
+          if (booksWithISBN.length > 0) {
+            console.time("googleBooks-withISBN");
+            const googleBooksData = await fetchMultipleBooks(
+              booksWithISBN.map((book) => ({
+                title: book.title,
+                author: book.author,
+              }))
+            );
+            console.timeEnd("googleBooks-withISBN");
 
-        booksWithISBN.forEach((book) => {
-          book.coverUrl = openLibraryCoverUrls.get(book.isbn);
-        });
-      }
+            const googleBooksMap = new Map(
+              googleBooksData.map((book) => [
+                `${book.title}-${book.author}`,
+                book.coverUrl,
+              ])
+            );
 
-      // 2. For books with ISBN but missing covers, try Google Books
-      const booksNeedingGoogleCovers = booksWithISBN.filter(
-        (book) => !book.coverUrl
-      );
+            booksWithISBN.forEach((book) => {
+              book.coverUrl = googleBooksMap.get(
+                `${book.title}-${book.author}`
+              );
+            });
 
-      if (booksNeedingGoogleCovers.length > 0) {
-        const googleBooksData = await fetchMultipleBooks(
-          booksNeedingGoogleCovers.map((book) => ({
-            title: book.title,
-            author: book.author,
-          }))
-        );
+            // Handle missing covers with OpenLibrary
+            const booksNeedingOpenLibrary = booksWithISBN.filter(
+              (book) => !book.coverUrl
+            );
 
-        const googleBooksMap = new Map(
-          googleBooksData.map((book) => [
-            `${book.title}-${book.author}`,
-            book.coverUrl,
-          ])
-        );
+            if (booksNeedingOpenLibrary.length > 0) {
+              console.time("openLibrary");
+              const openLibraryCoverUrls = await fetchMultipleCovers(
+                booksNeedingOpenLibrary.map((book) => book.isbn)
+              );
+              console.timeEnd("openLibrary");
 
-        booksNeedingGoogleCovers.forEach((book) => {
-          book.coverUrl = googleBooksMap.get(`${book.title}-${book.author}`);
-        });
-      }
-
-      // 3. For books without ISBN, get both ISBN and cover from Google Books
-      if (booksWithoutISBN.length > 0) {
-        const googleBooksData = await fetchMultipleBooks(
-          booksWithoutISBN.map((book) => ({
-            title: book.title,
-            author: book.author,
-          }))
-        );
-
-        const googleBooksMap = new Map(
-          googleBooksData.map((book) => [
-            `${book.title}-${book.author}`,
-            [book.isbn, book.coverUrl] as const,
-          ])
-        );
-
-        booksWithoutISBN.forEach((book) => {
-          const data = googleBooksMap.get(`${book.title}-${book.author}`);
-          if (data) {
-            book.isbn = data[0] || "";
-            book.coverUrl = data[1];
+              booksNeedingOpenLibrary.forEach((book) => {
+                book.coverUrl = openLibraryCoverUrls.get(book.isbn);
+              });
+            }
           }
-        });
-      }
+        })(),
 
-      // Store all books, but only current year's books will have cover URLs
+        // Process books without ISBN through Google Books
+        (async () => {
+          if (booksWithoutISBN.length > 0) {
+            console.time("googleBooks-withoutISBN");
+            const googleBooksData = await fetchMultipleBooks(
+              booksWithoutISBN.map((book) => ({
+                title: book.title,
+                author: book.author,
+              }))
+            );
+            console.timeEnd("googleBooks-withoutISBN");
+
+            const googleBooksMap = new Map(
+              googleBooksData.map((book) => [
+                `${book.title}-${book.author}`,
+                [book.isbn, book.coverUrl] as const,
+              ])
+            );
+
+            booksWithoutISBN.forEach((book) => {
+              const data = googleBooksMap.get(`${book.title}-${book.author}`);
+              if (data) {
+                book.isbn = data[0] || "";
+                book.coverUrl = data[1];
+              }
+            });
+          }
+        })(),
+      ]);
+
+      // Store all books
       setBooks(allProcessedBooks);
     } catch (err) {
       setError("Error processing books data");

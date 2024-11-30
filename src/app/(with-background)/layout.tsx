@@ -1,4 +1,3 @@
-import { useBookData } from "@/hooks/useBookData";
 import BackgroundContainer from "@/context/BackgroundContainer";
 
 export default function BackgroundLayout({

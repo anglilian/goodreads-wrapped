@@ -13,15 +13,20 @@ export default function Loader({ customText }: LoaderProps) {
     "Analysing your reading journey...",
     "Comparing your books with last year...",
     "Figuring out what books you liked...",
+    "Fun fact: The first Goodreads review was posted in 2007!",
+    "Fun fact: The word 'bookworm' has been around since 1580!",
+    "Fun fact: The dot over the letter 'i' is called a tittle.",
+    "Some people experience a 'book hangover' after finishing an amazing read 🤕",
+    "Processing your literary adventures...",
+    "Organising your bookshelf...",
   ];
 
   useEffect(() => {
     if (customText) return; // Don't start interval if using custom text
 
     const intervalId = setInterval(() => {
-      setTextIndex((prevIndex) =>
-        prevIndex === loadingTexts.length - 1 ? 0 : prevIndex + 1
-      );
+      const randomIndex = Math.floor(Math.random() * loadingTexts.length);
+      setTextIndex(randomIndex);
     }, 5000);
 
     return () => clearInterval(intervalId);

@@ -4,6 +4,7 @@ import Ratings from "@/components/top-books/Ratings";
 import BookCoverCarousel from "@/components/top-books/BookCoverCarousel";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 import EmojiButton from "@/components/ui/EmojiButton";
+import { useRouter } from "next/router";
 
 export default function TopBooks() {
   const { books, sharedBy } = useBookData();
@@ -14,13 +15,17 @@ export default function TopBooks() {
 
   const fiveStarBooks = booksThisYear
     .filter((book) => book.rating === 5)
-    .map((book) => book.coverUrl as string);
+    .map((book) => ({
+      coverUrl: book.coverUrl as string,
+      title: book.title,
+      author: book.author,
+    }));
 
   if (fiveStarBooks.length > 0) {
     return (
       <div className="page-container">
         <h4>{sharedBy ? `Check these out!` : "Remember these?"}</h4>
-        <BookCoverCarousel coverUrls={fiveStarBooks} />
+        <BookCoverCarousel books={fiveStarBooks} />
         <h2>
           {sharedBy ? `${sharedBy} ` : "You "}
           <span className="text-secondary italic">really</span> loved them
@@ -34,7 +39,11 @@ export default function TopBooks() {
 
   const fourStarBooks = booksThisYear
     .filter((book) => book.rating === 4)
-    .map((book) => book.coverUrl as string);
+    .map((book) => ({
+      coverUrl: book.coverUrl as string,
+      title: book.title,
+      author: book.author,
+    }));
 
   if (fourStarBooks.length > 0) {
     return (
@@ -43,12 +52,17 @@ export default function TopBooks() {
           None made the <span className="text-secondary italic">5-star</span>{" "}
           list
         </h2>
-        <BookCoverCarousel coverUrls={fourStarBooks} />
+        <BookCoverCarousel books={fourStarBooks} />
         <h4>But these came close...</h4>
         <Ratings rating={4} />
         <EmojiButton emoji="🥰" />
         <NavigationButtons />
       </div>
     );
+  }
+
+  if (fourStarBooks.length === 0 && fiveStarBooks.length === 0) {
+    const router = useRouter();
+    router.push("/book-rating");
   }
 }

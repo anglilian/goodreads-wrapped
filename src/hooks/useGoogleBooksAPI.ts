@@ -5,6 +5,22 @@ import { fetchWithRetry } from "@/utils/fetchWithRetry";
 const BATCH_SIZE = 10; // Process 10 books at a time
 const BATCH_DELAY = 1000; // 1 second between batches
 
+// Add this helper function at the top with the other utility functions
+function getEnhancedCoverUrl(volumeInfo?: {
+  imageLinks?: {
+    thumbnail?: string;
+  };
+  printType?: string;
+}): string | undefined {
+  if (!volumeInfo?.imageLinks?.thumbnail) return undefined;
+
+  return volumeInfo.imageLinks.thumbnail
+    .replace("http:", "https:")
+    .replace("zoom=1", "zoom=2")
+    .replace("&edge=curl", "")
+    .replace("&fife=w200-h300", "");
+}
+
 // Core function to fetch from Google Books API
 async function fetchGoogleBooks(query: string): Promise<GoogleBooksResponse> {
   const response = await fetch(
@@ -24,11 +40,9 @@ export async function getBookDataByISBN(
 ): Promise<{ coverUrl?: string }> {
   try {
     const data = await fetchWithRetry(() => fetchGoogleBooks(`isbn:${isbn}`));
-    const coverUrl = data.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
+    const coverUrl = getEnhancedCoverUrl(data.items?.[0]?.volumeInfo);
 
-    return {
-      coverUrl: coverUrl ? coverUrl.replace("http:", "https:") : undefined,
-    };
+    return { coverUrl };
   } catch (err) {
     console.error("Error fetching by ISBN:", err);
     return {};
@@ -50,11 +64,11 @@ export async function getBookDataByTitleAuthor(
     const identifiers = firstBook?.industryIdentifiers || [];
     const isbn13 = identifiers.find((id) => id.type === "ISBN_13");
     const isbn10 = identifiers.find((id) => id.type === "ISBN_10");
-    const coverUrl = firstBook?.imageLinks?.thumbnail;
+    const coverUrl = getEnhancedCoverUrl(firstBook);
 
     return {
       isbn: isbn13?.identifier || isbn10?.identifier || "",
-      coverUrl: coverUrl ? coverUrl.replace("http:", "https:") : undefined,
+      coverUrl,
     };
   } catch (err) {
     console.error("Error fetching by title/author:", err);

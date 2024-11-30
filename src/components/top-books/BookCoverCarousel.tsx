@@ -1,18 +1,22 @@
 import React from "react";
 
 interface BookCoverCarouselProps {
-  coverUrls: string[];
+  books: {
+    coverUrl: string;
+    title: string;
+    author: string;
+  }[];
 }
 
-const BookCoverCarousel = ({ coverUrls }: BookCoverCarouselProps) => {
+const BookCoverCarousel = ({ books }: BookCoverCarouselProps) => {
   // If 2 or fewer covers, show static view
-  if (coverUrls.length <= 2) {
+  if (books.length <= 2) {
     return (
       <div className="flex justify-center gap-4 p-4">
-        {coverUrls.map((url, index) => (
+        {books.map((book, index) => (
           <div key={index} className="flex-shrink-0">
             <img
-              src={url}
+              src={book.coverUrl}
               alt="Book cover"
               className="h-48 w-32 object-cover rounded-md shadow-md"
               loading="lazy"
@@ -23,14 +27,14 @@ const BookCoverCarousel = ({ coverUrls }: BookCoverCarouselProps) => {
     );
   }
 
-  const duplicatedBooks = [...coverUrls, ...coverUrls];
+  const duplicatedBooks = [...books, ...books];
 
   // Calculate animation duration based on number of books
   // Base duration of 10s for 3 books, add 2s for each additional book
   const getAnimationDuration = () => {
     const baseDuration = 10;
     const durationPerBook = 2;
-    const duration = baseDuration + (coverUrls.length - 3) * durationPerBook;
+    const duration = baseDuration + (books.length - 3) * durationPerBook;
     return `${duration}s`;
   };
 
@@ -45,10 +49,10 @@ const BookCoverCarousel = ({ coverUrls }: BookCoverCarouselProps) => {
           animationDuration: getAnimationDuration(),
         }}
       >
-        {duplicatedBooks.map((url, index) => (
-          <div key={`${url}-${index}`} className="flex-shrink-0">
+        {duplicatedBooks.map((book, index) => (
+          <div key={`${book.coverUrl}-${index}`} className="flex-shrink-0">
             <img
-              src={url}
+              src={book.coverUrl}
               alt="Book cover"
               className="h-52 w-36 object-cover rounded-md shadow-md"
               loading="lazy"

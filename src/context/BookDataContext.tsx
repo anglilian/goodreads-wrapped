@@ -67,45 +67,45 @@ export function BookDataProvider({
 
       // Process both groups in parallel
       await Promise.all([
-        // Process books with ISBN through Google Books first
+        // Process books with ISBN through OpenLibrary first, then Google Books as fallback
         (async () => {
           if (booksWithISBN.length > 0) {
-            console.time("googleBooks-withISBN");
-            const googleBooksData = await fetchMultipleBooks(
-              booksWithISBN.map((book) => ({
-                title: book.title,
-                author: book.author,
-              }))
+            console.time("openLibrary");
+            const openLibraryCoverUrls = await fetchMultipleCovers(
+              booksWithISBN.map((book) => book.isbn)
             );
-            console.timeEnd("googleBooks-withISBN");
-
-            const googleBooksMap = new Map(
-              googleBooksData.map((book) => [
-                `${book.title}-${book.author}`,
-                book.coverUrl,
-              ])
-            );
+            console.timeEnd("openLibrary");
 
             booksWithISBN.forEach((book) => {
-              book.coverUrl = googleBooksMap.get(
-                `${book.title}-${book.author}`
-              );
+              book.coverUrl = openLibraryCoverUrls.get(book.isbn);
             });
 
-            // Handle missing covers with OpenLibrary
-            const booksNeedingOpenLibrary = booksWithISBN.filter(
+            // Handle missing covers with Google Books as fallback
+            const booksNeedingGoogleBooks = booksWithISBN.filter(
               (book) => !book.coverUrl
             );
 
-            if (booksNeedingOpenLibrary.length > 0) {
-              console.time("openLibrary");
-              const openLibraryCoverUrls = await fetchMultipleCovers(
-                booksNeedingOpenLibrary.map((book) => book.isbn)
+            if (booksNeedingGoogleBooks.length > 0) {
+              console.time("googleBooks-fallback");
+              const googleBooksData = await fetchMultipleBooks(
+                booksNeedingGoogleBooks.map((book) => ({
+                  title: book.title,
+                  author: book.author,
+                }))
               );
-              console.timeEnd("openLibrary");
+              console.timeEnd("googleBooks-fallback");
 
-              booksNeedingOpenLibrary.forEach((book) => {
-                book.coverUrl = openLibraryCoverUrls.get(book.isbn);
+              const googleBooksMap = new Map(
+                googleBooksData.map((book) => [
+                  `${book.title}-${book.author}`,
+                  book.coverUrl,
+                ])
+              );
+
+              booksNeedingGoogleBooks.forEach((book) => {
+                book.coverUrl = googleBooksMap.get(
+                  `${book.title}-${book.author}`
+                );
               });
             }
           }

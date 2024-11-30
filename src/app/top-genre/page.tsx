@@ -113,10 +113,13 @@ Your output should be online completing the sentence: "You read a lot about" and
         {genreAnalysis.isbns.length > 0 && (
           <div className="mt-2">
             <BookCoverCarousel
-              coverUrls={booksThisYear
+              books={booksThisYear
                 .filter((book) => genreAnalysis.isbns.includes(book.isbn))
-                .map((book) => book.coverUrl)
-                .filter((url): url is string => url !== undefined)}
+                .map((book) => ({
+                  coverUrl: book.coverUrl as string,
+                  title: book.title,
+                  author: book.author,
+                }))}
             />
           </div>
         )}

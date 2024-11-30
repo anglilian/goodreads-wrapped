@@ -178,7 +178,7 @@ export function BookDataProvider({
     setError(null);
 
     try {
-      const response = await fetch(`/api/get-data?reader_id=${readerId}`);
+      const response = await fetch(`/api/get-data?id=${readerId}`);
       const data = await response.json();
 
       if (!response.ok) {

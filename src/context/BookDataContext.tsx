@@ -9,8 +9,6 @@ export const BookDataContext = createContext<BookDataContextType | undefined>(
   undefined
 );
 
-const STORAGE_KEY = "goodreads_wrapped_books";
-
 const cleanISBN = (isbn: string): string => {
   return isbn.replace(/^=?"?|"?$/g, "").trim();
 };
@@ -22,26 +20,7 @@ export function BookDataProvider({
 }: {
   children: ReactNode;
 }): JSX.Element {
-  // Initialize state from localStorage if available
-  const [books, setBooks] = useState<Book[]>(() => {
-    if (typeof window === "undefined") return [];
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        // Restore Date objects from JSON strings
-        return parsed.map((book: any) => ({
-          ...book,
-          dateRead: new Date(book.dateRead),
-        }));
-      } catch (e) {
-        console.error("Error parsing stored books:", e);
-        return [];
-      }
-    }
-    return [];
-  });
+  const [books, setBooks] = useState<Book[]>([]);
 
   const [genreAnalysis, setGenreAnalysis] = useState<{
     genre: string;
@@ -53,13 +32,6 @@ export function BookDataProvider({
   const { fetchMultipleBooks } = useGoogleBooksAPI();
   const { fetchMultipleCovers } = useOpenLibraryAPI();
   const router = useRouter();
-
-  // Save to localStorage whenever books change
-  useEffect(() => {
-    if (books.length > 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(books));
-    }
-  }, [books]);
 
   const processBooks = async (rawBooks: RawBook[]) => {
     setIsLoading(true);
@@ -170,7 +142,6 @@ export function BookDataProvider({
     setBooks([]);
     setGenreAnalysis(null);
     setSharedBy(null);
-    localStorage.removeItem(STORAGE_KEY);
   };
 
   const loadSharedData = async (readerId: string) => {

@@ -40,8 +40,14 @@ export default function PagesRead() {
         <h1>{thisYearPages.toLocaleString()} pages</h1>
         <h5 className="mt-4">
           {"(that's "}
-          <span className="text-secondary font-bold">{ratio} times</span> more
-          than last year!)
+          <span className="text-secondary font-bold">
+            {thisYearPages === lastYearPages
+              ? "the same amount"
+              : thisYearPages > lastYearPages
+              ? `${ratio} times more`
+              : `${(lastYearPages / thisYearPages).toFixed(1)} times less`}
+          </span>
+          {" than last year!)"}
         </h5>
       </div>
 

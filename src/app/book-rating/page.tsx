@@ -4,8 +4,10 @@ import NavigationButtons from "@/components/ui/NavigationWrapper";
 import Ratings from "@/components/top-books/Ratings";
 import EmojiButton from "@/components/ui/EmojiButton";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function BookRating() {
+  const router = useRouter();
   const { books, sharedBy } = useBookData();
   const currentYear = new Date().getFullYear();
   const thisYearBooks = books.filter(
@@ -13,9 +15,13 @@ export default function BookRating() {
   );
 
   // Add this effect to handle navigation
+  useEffect(() => {
+    if (thisYearBooks.length === 0) {
+      router.push("/pages-read");
+    }
+  }, [thisYearBooks.length, router]);
+
   if (thisYearBooks.length === 0) {
-    const router = useRouter();
-    router.push("/pages-read"); // Replace with your actual next page route
     return null;
   }
 

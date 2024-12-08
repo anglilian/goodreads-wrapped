@@ -34,7 +34,7 @@ function WelcomePageContent() {
       console.error("Failed to load shared data:", error);
       router.push("/");
     });
-  }, [readerId]);
+  }, [readerId, clearBooks, loadSharedData, router]);
 
   const shouldShowLoader = isLoading || (readerId && books.length === 0);
 

@@ -14,9 +14,9 @@ export default function Loader({ customText }: LoaderProps) {
     "Comparing your books with last year...",
     "Figuring out what books you liked...",
     "Fun fact: The first Goodreads review was posted in 2007!",
-    "Fun fact: The word 'bookworm' has been around since 1580!",
-    "Fun fact: The dot over the letter 'i' is called a tittle.",
-    "Some people experience a 'book hangover' after finishing an amazing read 🤕",
+    "Fun fact: The word &apos;bookworm&apos; has been around since 1580!",
+    "Fun fact: The dot over the letter &apos;i&apos; is called a tittle.",
+    "Some people experience a &apos;book hangover&apos; after finishing an amazing read 🤕",
     "Processing your literary adventures...",
     "Organising your bookshelf...",
   ];
@@ -30,7 +30,7 @@ export default function Loader({ customText }: LoaderProps) {
     }, 5000);
 
     return () => clearInterval(intervalId);
-  }, [customText]);
+  }, [customText, loadingTexts.length]);
 
   return (
     <div className="flex flex-col justify-center items-center space-y-2">

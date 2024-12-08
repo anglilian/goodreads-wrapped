@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useBookData } from "@/hooks/useBookData";
 import BookCoverCarousel from "@/components/top-books/BookCoverCarousel";
 import Loader from "@/components/app/Loader";
@@ -20,7 +20,7 @@ export default function TopGenre() {
   );
 
   // Function to fetch and analyze genre data
-  const analyzeGenre = async () => {
+  const analyzeGenre = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
@@ -71,14 +71,14 @@ Your output should be online completing the sentence: "You read a lot about" and
     } finally {
       setLoading(false);
     }
-  };
+  }, [booksThisYear]);
 
   // Only fetch genre analysis if we don't have it cached and there's no sharedBy (meaning it's not pre-filled data)
   useEffect(() => {
     if (!genreAnalysis && !loading && booksThisYear.length > 0 && !sharedBy) {
       analyzeGenre();
     }
-  }, [genreAnalysis, loading, booksThisYear.length, sharedBy]);
+  }, [genreAnalysis, loading, booksThisYear.length, sharedBy, analyzeGenre]);
 
   // Show error if present
   if (error) {

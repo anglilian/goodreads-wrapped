@@ -10,7 +10,6 @@ function getEnhancedCoverUrl(volumeInfo?: {
   imageLinks?: {
     thumbnail?: string;
   };
-  printType?: string;
 }): string | undefined {
   if (!volumeInfo?.imageLinks?.thumbnail) return undefined;
 
@@ -23,8 +22,9 @@ function getEnhancedCoverUrl(volumeInfo?: {
 
 // Core function to fetch from Google Books API
 async function fetchGoogleBooks(query: string): Promise<GoogleBooksResponse> {
+  const encodedquery = encodeURIComponent(query);
   const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${query}`
+    `https://www.googleapis.com/books/v1/volumes?q=${encodedquery}`
   );
 
   if (!response.ok) {

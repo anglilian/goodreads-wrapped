@@ -23,9 +23,10 @@ export default function NoDataModal({ isOpen, onClose }: NoDataModalProps) {
         </button>
         <h5 className="font-bold mb-4">No books this year?</h5>
         <p className="mb-4">
-          We couldn't find any books read in {new Date().getFullYear()}. You can
-          easily <a href="https://www.goodreads.com/review/list">add books</a>{" "}
-          to this list by setting "Date Read" for each book to any time in{" "}
+          We couldn&apos;t find any books read in {new Date().getFullYear()}.
+          You can easily{" "}
+          <a href="https://www.goodreads.com/review/list">add books</a> to this
+          list by setting &lsquo;Date Read&rsquo; for each book to any time in{" "}
           {new Date().getFullYear()}.
         </p>
       </div>

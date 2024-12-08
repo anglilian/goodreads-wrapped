@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { getBookDataByISBN } from "./useGoogleBooksAPI";
 
 // Rate limiting configuration
 const RATE_LIMIT = {
@@ -15,8 +16,8 @@ export function useOpenLibraryAPI() {
   const fetchCoverUrl = useCallback(
     async (isbn: string, retries = 2): Promise<string | null> => {
       try {
+        // Try OpenLibrary first
         const url = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
-
         const response = await fetch(url, {
           method: "HEAD",
           cache: "no-cache",
@@ -28,10 +29,16 @@ export function useOpenLibraryAPI() {
           return fetchCoverUrl(isbn, retries - 1);
         }
 
-        if (!response.ok) return null;
+        if (response.ok) {
+          const contentLength = response.headers.get("content-length");
+          if (contentLength && parseInt(contentLength) > 1000) {
+            return url;
+          }
+        }
 
-        const contentLength = response.headers.get("content-length");
-        return contentLength && parseInt(contentLength) > 1000 ? url : null;
+        // If OpenLibrary doesn't have the cover, try Google Books API
+        const googleBooksData = await getBookDataByISBN(isbn);
+        return googleBooksData.coverUrl || null;
       } catch {
         return null;
       }

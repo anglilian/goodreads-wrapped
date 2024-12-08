@@ -15,7 +15,6 @@ function WelcomePageContent() {
   const {
     books,
     isLoading,
-    error,
     setProcessedBooks,
     loadSharedData,
     setGenreAnalysis,
@@ -27,14 +26,14 @@ function WelcomePageContent() {
   const [showHelpPopup, setShowHelpPopup] = useState(false);
 
   useEffect(() => {
-    if (!readerId) return;
+    if (!readerId || isLoading) return;
 
     clearBooks();
     loadSharedData(readerId).catch((error) => {
       console.error("Failed to load shared data:", error);
       router.push("/");
     });
-  }, [readerId, clearBooks, loadSharedData, router]);
+  }, [readerId, clearBooks, loadSharedData, router, isLoading]);
 
   const shouldShowLoader = isLoading || (readerId && books.length === 0);
 

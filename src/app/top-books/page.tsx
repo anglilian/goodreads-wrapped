@@ -4,7 +4,7 @@ import Ratings from "@/components/top-books/Ratings";
 import BookCoverCarousel from "@/components/top-books/BookCoverCarousel";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 import EmojiButton from "@/components/ui/EmojiButton";
-import { useRouter } from "next/router";
+import { redirect } from "next/navigation";
 
 export default function TopBooks() {
   const { books, sharedBy } = useBookData();
@@ -66,7 +66,6 @@ export default function TopBooks() {
   }
 
   if (fourStarBooks.length === 0 && fiveStarBooks.length === 0) {
-    const router = useRouter();
-    router.push("/book-rating");
+    redirect("/book-rating");
   }
 }

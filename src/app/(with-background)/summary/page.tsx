@@ -72,7 +72,7 @@ export default function Summary() {
 
       <div className="flex flex-col gap-4 items-center justify-center text-center bg-background p-8 rounded-md">
         <header className="text-center space-y-2">
-          <h3>{sharedBy ? `${sharedBy}&apos;s` : "That&apos;s a wrap for"}</h3>
+          <h3>{sharedBy ? `${sharedBy}'s` : "That&apos;s a wrap for"}</h3>
           <h1>{currentYear}</h1>
         </header>
 

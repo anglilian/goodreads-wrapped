@@ -71,7 +71,7 @@ Your output should be online completing the sentence: "You read a lot about" and
     } finally {
       setLoading(false);
     }
-  }, [booksThisYear]);
+  }, [booksThisYear, setGenreAnalysis]);
 
   // Only fetch genre analysis if we don't have it cached and there's no sharedBy (meaning it's not pre-filled data)
   useEffect(() => {

@@ -21,7 +21,7 @@ export default function StartPage() {
   return (
     <div className="page-container bg-background/90">
       <div className="flex flex-col items-center justify-center text-center gap-1">
-        <h3>{sharedBy ? `${sharedBy}'s` : "Your"}</h3>
+        <h3>{sharedBy ? `${sharedBy}&apos;s` : "Your"}</h3>
         <h1>{currentYear}</h1>
         <h3> in Books</h3>
       </div>

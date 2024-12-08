@@ -30,7 +30,7 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
 
     return (
       <div className="fixed inset-0 -z-10 overflow-hidden flex justify-center">
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-3xl">
           <div
             className="grid grid-cols-3 gap-4 auto-rows-max mx-auto"
             style={{ gridTemplateColumns: "repeat(3, minmax(0, 1fr))" }}
@@ -66,7 +66,16 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
 
     // Pad shorter columns by repeating books
     while (columnBooks.length < maxLength) {
-      columnBooks.push(...columnBooks.slice(0, maxLength - columnBooks.length));
+      // Get the last book in the column
+      const lastBook = columnBooks[columnBooks.length - 1];
+      // Get available books excluding the last book
+      const availableBooks = columnBooks.filter((book) => book !== lastBook);
+      // If we have no available books (rare case with only one book), just add any book
+      const bookToAdd =
+        availableBooks.length > 0
+          ? availableBooks[Math.floor(Math.random() * availableBooks.length)]
+          : columnBooks[0];
+      columnBooks.push(bookToAdd);
     }
 
     let duplicatedColumnBooks = [...columnBooks, ...columnBooks];
@@ -76,7 +85,7 @@ const BookBackground = ({ coverUrls }: BookBackgroundProps) => {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden flex justify-center p-2">
-      <div className="max-w-2xl flex gap-4 h-full">
+      <div className="w-full max-w-2xl flex gap-4 h-full">
         {Array.from({ length: numColumns }, (_, index) => (
           <div key={index} className="column">
             <div

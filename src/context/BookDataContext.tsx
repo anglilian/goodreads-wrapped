@@ -87,35 +87,6 @@ export function BookDataProvider({
             booksWithISBN.forEach((book) => {
               book.coverUrl = openLibraryCoverUrls.get(book.isbn);
             });
-
-            // Handle missing covers with Google Books as fallback
-            const booksNeedingGoogleBooks = booksWithISBN.filter(
-              (book) => !book.coverUrl
-            );
-
-            if (booksNeedingGoogleBooks.length > 0) {
-              console.time("googleBooks-fallback");
-              const googleBooksData = await fetchMultipleBooks(
-                booksNeedingGoogleBooks.map((book) => ({
-                  title: book.title,
-                  author: book.author,
-                }))
-              );
-              console.timeEnd("googleBooks-fallback");
-
-              const googleBooksMap = new Map(
-                googleBooksData.map((book) => [
-                  `${book.title}-${book.author}`,
-                  book.coverUrl,
-                ])
-              );
-
-              booksNeedingGoogleBooks.forEach((book) => {
-                book.coverUrl = googleBooksMap.get(
-                  `${book.title}-${book.author}`
-                );
-              });
-            }
           }
         })(),
 
@@ -131,18 +102,17 @@ export function BookDataProvider({
             );
             console.timeEnd("googleBooks-withoutISBN");
 
-            const googleBooksMap = new Map(
-              googleBooksData.map((book) => [
-                `${book.title}-${book.author}`,
-                [book.isbn, book.coverUrl] as const,
-              ])
-            );
-
             booksWithoutISBN.forEach((book) => {
-              const data = googleBooksMap.get(`${book.title}-${book.author}`);
-              if (data) {
-                book.isbn = data[0] || "";
-                book.coverUrl = data[1];
+              const matchingBook = googleBooksData.find(
+                (data) =>
+                  data.title === book.title && data.author === book.author
+              );
+
+              if (matchingBook?.coverUrl) {
+                book.coverUrl = matchingBook.coverUrl;
+              }
+              if (matchingBook?.isbn) {
+                book.isbn = matchingBook.isbn;
               }
             });
           }

@@ -13,18 +13,27 @@ function getEnhancedCoverUrl(volumeInfo?: {
 }): string | undefined {
   if (!volumeInfo?.imageLinks?.thumbnail) return undefined;
 
-  return volumeInfo.imageLinks.thumbnail
+  const thumbnail = volumeInfo.imageLinks.thumbnail;
+
+  // Check if it's the default "no cover" image (575x750)
+
+  const img = new Image();
+  img.src = thumbnail;
+  if (img.width === 575 && img.height === 750) {
+    return undefined;
+  }
+
+  return thumbnail
     .replace("http:", "https:")
-    .replace("zoom=1", "zoom=2")
     .replace("&edge=curl", "")
     .replace("&fife=w200-h300", "");
 }
 
 // Core function to fetch from Google Books API
 async function fetchGoogleBooks(query: string): Promise<GoogleBooksResponse> {
-  const encodedquery = encodeURIComponent(query);
+  console.log(query);
   const response = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${encodedquery}`
+    `https://www.googleapis.com/books/v1/volumes?q=${query}`
   );
 
   if (!response.ok) {
@@ -40,7 +49,7 @@ export async function getBookDataByISBN(
 ): Promise<{ coverUrl?: string }> {
   try {
     const data = await fetchWithRetry(() => fetchGoogleBooks(`isbn:${isbn}`));
-    const coverUrl = getEnhancedCoverUrl(data.items?.[0]?.volumeInfo);
+    let coverUrl = getEnhancedCoverUrl(data.items?.[0]?.volumeInfo);
 
     return { coverUrl };
   } catch (err) {
@@ -53,26 +62,27 @@ export async function getBookDataByISBN(
 export async function getBookDataByTitleAuthor(
   title: string,
   author: string
-): Promise<{ isbn: string; coverUrl?: string }> {
+): Promise<{ isbn?: string; coverUrl?: string }> {
   try {
-    const query = `title:${encodeURIComponent(
-      title
-    )}+authors:${encodeURIComponent(author)}`;
-    const data = await fetchWithRetry(() => fetchGoogleBooks(query));
+    const data = await fetchWithRetry(() =>
+      fetchGoogleBooks(
+        `intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(
+          author
+        )}`
+      )
+    );
 
     const firstBook = data.items?.[0]?.volumeInfo;
-    const identifiers = firstBook?.industryIdentifiers || [];
-    const isbn13 = identifiers.find((id) => id.type === "ISBN_13");
-    const isbn10 = identifiers.find((id) => id.type === "ISBN_10");
+    const [isbn13, isbn10] = (firstBook?.industryIdentifiers ?? [])
+      .filter((id) => id.type === "ISBN_13" || id.type === "ISBN_10")
+      .sort((a, b) => (a.type === "ISBN_10" ? -1 : 1)); // Prioritize ISBN_10
+    const isbn = isbn10?.identifier ?? isbn13?.identifier;
     const coverUrl = getEnhancedCoverUrl(firstBook);
 
-    return {
-      isbn: isbn13?.identifier || isbn10?.identifier || "",
-      coverUrl,
-    };
+    return { isbn, coverUrl };
   } catch (err) {
-    console.error("Error fetching by title/author:", err);
-    return { isbn: "" };
+    console.error(`Error fetching ${title} by ${author}`, err);
+    return {};
   }
 }
 
@@ -104,32 +114,32 @@ export function useGoogleBooksAPI() {
     []
   );
 
-  // Function to process multiple books in batches
-  const processBatch = useCallback(
-    async (
-      books: Array<{ title: string; author: string }>,
-      startIndex: number
-    ) => {
-      const batchBooks = books.slice(startIndex, startIndex + BATCH_SIZE);
-      const results = await Promise.all(
-        batchBooks.map(async (book) => ({
-          ...book,
-          ...(await getBookDataByTitleAuthor(book.title, book.author)),
-        }))
-      );
-      return results;
-    },
-    []
-  );
-
   const fetchMultipleBooks = useCallback(
     async (books: Array<{ title: string; author: string }>) => {
       setIsLoading(true);
       const results = [];
+      const booksWithoutCovers: string[] = [];
 
       try {
         for (let i = 0; i < books.length; i += BATCH_SIZE) {
-          const batchResults = await processBatch(books, i);
+          const batchBooks = books.slice(i, i + BATCH_SIZE);
+          const batchResults = await Promise.all(
+            batchBooks.map(async (book) => {
+              const result = await getBookDataByTitleAuthor(
+                book.title,
+                book.author
+              );
+
+              if (!result.coverUrl) {
+                booksWithoutCovers.push(`${book.title} by ${book.author}`);
+              }
+
+              return {
+                ...book,
+                ...result,
+              };
+            })
+          );
           results.push(...batchResults);
 
           if (i + BATCH_SIZE < books.length) {
@@ -144,9 +154,13 @@ export function useGoogleBooksAPI() {
         setIsLoading(false);
       }
 
+      if (booksWithoutCovers.length > 0) {
+        console.warn("Books without covers:", booksWithoutCovers.join("\n"));
+      }
+
       return results;
     },
-    [processBatch]
+    []
   );
 
   return {

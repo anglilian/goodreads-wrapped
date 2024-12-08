@@ -40,7 +40,7 @@ const BookCoverCarousel = ({ books }: BookCoverCarouselProps) => {
   };
 
   return (
-    <div className="relative overflow-hidden w-full max-auto max-w-96">
+    <div className="relative overflow-hidden w-full max-auto max-w-4xl">
       {/* Left fade overlay */}
       <div className="absolute left-0 top-0 h-full w-2 bg-gradient-to-r from-background to-transparent z-10" />
 

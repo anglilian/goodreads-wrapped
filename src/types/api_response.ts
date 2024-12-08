@@ -8,6 +8,8 @@ export interface GoogleBooksResponse {
       imageLinks?: {
         thumbnail?: string;
       };
+      title?: string;
+      authors?: string[];
     };
   }>;
 }

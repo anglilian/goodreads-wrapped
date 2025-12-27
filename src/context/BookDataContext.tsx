@@ -39,7 +39,9 @@ export function BookDataProvider({
       // First filter for current and previous year's books
       const filteredRawBooks = rawBooks.filter((book) => {
         const bookYear = new Date(book["Date Read"]).getFullYear();
-        return bookYear === currentYear || bookYear === currentYear - 1;
+        const isInYearRange = bookYear === currentYear || bookYear === currentYear - 1;
+        const isRead = book["Exclusive Shelf"] === "read";
+        return isInYearRange && isRead;
       });
 
       // Process only filtered books

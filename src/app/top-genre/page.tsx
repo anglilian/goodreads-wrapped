@@ -12,6 +12,8 @@ export default function TopGenre() {
   const { books, genreAnalysis, setGenreAnalysis, sharedBy } = useBookData();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
   const currentYear = new Date().getFullYear();
 
   // Filter books for current year
@@ -46,10 +48,18 @@ Your output should be online completing the sentence: "You read a lot about" and
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(
-          `Request failed with status ${response.status}. Details: ${errorText}`
-        );
+        // Special handling for server errors
+        if (response.status >= 500) {
+          throw new Error("Server error. Please check your API configuration and try again.");
+        }
+        
+        // Try to get the error message from JSON response
+        try {
+          const errorData = await response.json();
+          throw new Error(errorData.error || `Request failed with status ${response.status}`);
+        } catch {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
       }
 
       const data = await response.json();
@@ -63,10 +73,11 @@ Your output should be online completing the sentence: "You read a lot about" and
       setGenreAnalysis({ genre, isbns });
     } catch (error) {
       console.error("Detailed error:", error);
+      setRetryCount(prev => prev + 1);
       setError(
         error instanceof Error
-          ? `Check console for details.`
-          : "An unexpected error occurred. Check console for details."
+          ? error.message
+          : "An unexpected error occurred. Please try again."
       );
     } finally {
       setLoading(false);
@@ -75,10 +86,10 @@ Your output should be online completing the sentence: "You read a lot about" and
 
   // Only fetch genre analysis if we don't have it cached and there's no sharedBy (meaning it's not pre-filled data)
   useEffect(() => {
-    if (!genreAnalysis && !loading && booksThisYear.length > 0 && !sharedBy) {
+    if (!genreAnalysis && !loading && booksThisYear.length > 0 && !sharedBy && retryCount < MAX_RETRIES) {
       analyzeGenre();
     }
-  }, [genreAnalysis, loading, booksThisYear.length, sharedBy, analyzeGenre]);
+  }, [genreAnalysis, loading, booksThisYear.length, sharedBy, retryCount, analyzeGenre]);
 
   // Show error if present
   if (error) {

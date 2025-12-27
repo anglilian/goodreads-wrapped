@@ -31,7 +31,23 @@ A web application that creates a visualisation of your Goodreads reading activit
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a PR.
+
+## Setup
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create your environment file:
+  ```bash
+  cp .env.example .env.local
+  ```
+4. Add your OpenAI API key
+5. Start the development server
+   ```bash
+   npm run dev
+   ```
 
 ## License
 

@@ -23,7 +23,6 @@ export default function TopGenre() {
   const analyzeGenre = useCallback(async () => {
     try {
       setLoading(true);
-      setError("");
 
       const booksList = booksThisYear
         .map((book) => `${book.title} by ${book.author} (ISBN: ${book.isbn})`)
@@ -60,12 +59,13 @@ Your output should be online completing the sentence: "You read a lot about" and
       }
 
       const { genre, isbns } = parseGenreResponse(data.response);
+      setError("");
       setGenreAnalysis({ genre, isbns });
     } catch (error) {
       console.error("Detailed error:", error);
       setError(
         error instanceof Error
-          ? `Error: ${error.message}. Check console for details.`
+          ? `Check console for details.`
           : "An unexpected error occurred. Check console for details."
       );
     } finally {
@@ -92,7 +92,7 @@ Your output should be online completing the sentence: "You read a lot about" and
   }
 
   // Show loading state only if no genre analysis
-  if (!genreAnalysis && loading) {
+  if (!genreAnalysis && loading && !error) {
     return (
       <div className="page-container">
         <Loader customText="Figuring out your top genre..." />

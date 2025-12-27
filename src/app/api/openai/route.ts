@@ -38,26 +38,20 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("OpenAI API error:", error);
 
-    // Check for insufficient quota
-    if (error?.status === 429 || error?.error?.code === "insufficient_quota") {
-      return NextResponse.json(
-        { error: "Failed to process the request. Please check that your OpenAI API has sufficient credits, then try again." },
-        { status: 429 }
-      );
+    // Extract the actual error message from OpenAI
+    let errorMessage = error?.message || error?.error?.message || "Failed to process the request. Please try again.";
+    
+    // Truncate error message if it's too long (max 200 characters)
+    if (errorMessage.length > 200) {
+      errorMessage = errorMessage.substring(0, 197) + "...";
     }
+    
+    // Get the status code from the error, default to 500
+    const statusCode = error?.status || 500;
 
-    // Check for invalid API key
-    if (error?.status === 401 || error?.error?.code === "invalid_api_key") {
-      return NextResponse.json(
-        { error: "Invalid API key. Please check your OpenAI API key configuration." },
-        { status: 401 }
-      );
-    }
-
-    // Generic error
     return NextResponse.json(
-      { error: "Failed to process the request. Please try again later or contact lilianang999@gmail.com" },
-      { status: 500 }
+      { error: errorMessage },
+      { status: statusCode }
     );
   }
 }

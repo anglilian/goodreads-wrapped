@@ -48,16 +48,15 @@ Your output should be online completing the sentence: "You read a lot about" and
       });
 
       if (!response.ok) {
-        // Special handling for server errors
-        if (response.status >= 500) {
-          throw new Error("Server error. Please check your API configuration and try again.");
-        }
-        
-        // Try to get the error message from JSON response
+        // Always try to get the error message from JSON response first
         try {
           const errorData = await response.json();
           throw new Error(errorData.error || `Request failed with status ${response.status}`);
-        } catch {
+        } catch (e) {
+          // Only use generic message if we can't parse the response
+          if (response.status >= 500) {
+            throw new Error("Server error. Please check your API configuration and try again.");
+          }
           throw new Error(`Request failed with status ${response.status}`);
         }
       }

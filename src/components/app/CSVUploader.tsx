@@ -9,11 +9,10 @@ import { useState } from "react";
 export default function CSVUploader() {
   const { processBooks, error: contextError } = useBookData();
   const [error, setError] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  // Extract file processing logic to be reused by both click and drag-drop
+  const processFile = (file: File) => {
     // Clear previous errors
     setError(null);
 
@@ -63,14 +62,60 @@ export default function CSVUploader() {
     });
   };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    processFile(file);
+  };
+
+  // Drag and drop handlers
+  const handleDragEnter = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file) {
+      processFile(file);
+    }
+  };
+
   const displayError = error || contextError;
 
   return (
     <div className="space-y-4 lg:max-w-80">
-      <label className="flex flex-col items-center gap-2 p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-primary-button transition-colors">
-        <Upload className="w-8 h-8 text-gray-400" />
-        <span className="text-sm text-gray-600">
-          Click to upload CSV from Goodreads
+      <label 
+        className={`flex flex-col items-center gap-2 p-6 border-2 border-dashed rounded-lg cursor-pointer transition-colors
+          ${isDragging 
+            ? 'border-primary-button bg-blue-50' 
+            : 'border-gray-300 hover:border-primary-button'
+          }`}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
+        <Upload className={`w-8 h-8 ${isDragging ? 'text-primary-button' : 'text-gray-400'}`} />
+        <span className={`text-sm ${isDragging ? 'text-primary-button' : 'text-gray-600'}`}>
+          {isDragging ? 'Drop your CSV file here' : 'Click or drag CSV from Goodreads'}
         </span>
         <input
           type="file"

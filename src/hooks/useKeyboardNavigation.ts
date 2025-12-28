@@ -10,6 +10,7 @@ export const PAGE_ORDER = [
   "/first-last-book",
   "/top-books",
   "/book-rating",
+  "/top-author",
   "/pages-read",
   "/top-genre",
   "/summary",

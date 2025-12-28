@@ -31,11 +31,11 @@ export default function FirstLastBook() {
         <h4>
           {sharedBy ? (
             <>
-              {sharedBy} <span className="text-secondary italic">started </span> {currentYear} with
+              {sharedBy} <span className="text-secondary italic mr-1">started </span> {currentYear} with
             </>
           ) : (
             <>
-              You <span className="text-secondary italic">started </span> {currentYear} with
+              You <span className="text-secondary italic mr-1">started </span> {currentYear} with
             </>
           )}
         </h4>
@@ -45,7 +45,7 @@ export default function FirstLastBook() {
             author: firstBook.author 
             }]} />
         <h4>
-          and <span className="text-secondary italic">ended</span> with
+          and <span className="text-secondary italic mr-1">ended</span> with
         </h4>
         <BookCoverCarousel books={[{ 
             coverUrl: lastBook.coverUrl as string, 

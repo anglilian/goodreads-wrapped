@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 export const PAGE_ORDER = [
   "/start",
   "/books-read",
+  "/first-last-book",
   "/top-books",
   "/book-rating",
   "/pages-read",

@@ -61,7 +61,7 @@ export default function BooksRead() {
     <div className="page-container">
       <div className="flex flex-col gap-4 items-center justify-center text-center bg-background p-8 rounded-md">
         <h3>{sharedBy ? `${sharedBy} read` : "You read"}</h3>
-        <h1>{getBookCountText()}</h1>
+        <h1 className="animate-fade-in-up animation-delay-200">{getBookCountText()}</h1>
         <h5>{getComparisonText()}</h5>
         <NavigationButtons />
       </div>

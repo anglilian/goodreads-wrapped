@@ -23,7 +23,7 @@ export default function StartPage() {
       <div className="flex flex-col items-center justify-center text-center gap-1">
         <h3>{sharedBy ? `${sharedBy}'s` : "Your"}</h3>
         <h1>{currentYear}</h1>
-        <h3> in Books</h3>
+        <h3> in books</h3>
       </div>
 
       <div className="flex flex-col gap-2">

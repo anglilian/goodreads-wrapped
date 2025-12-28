@@ -88,6 +88,8 @@ export default function Summary() {
           )}
         </div>
 
+        <h5 className="text-secondary-button font-normal italic">See you next year! 👋</h5>
+
         {/* Action Buttons */}
         <div className="flex gap-2">
           {sharedBy ? (

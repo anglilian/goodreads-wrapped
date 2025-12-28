@@ -134,12 +134,12 @@ Your output should be online completing the sentence: "You read a lot about" and
           </div>
         )}
         <h5>
-          (
-          <span className="text-secondary italic">
+          A whopping 
+          <span className="text-secondary italic ml-1">
             {genreAnalysis.isbns.length}{" "}
             {genreAnalysis.isbns.length === 1 ? "book" : "books"}
-          </span>{" "}
-          to be exact)
+          </span>
+          !
         </h5>
         <EmojiButton emoji="🙌" />
         <NavigationButtons />

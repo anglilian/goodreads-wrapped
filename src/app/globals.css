@@ -143,13 +143,3 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
-/* Utility Classes */
-.animate-float-up {
-  animation: float-up 1s ease-out forwards;
-}
-
-/* Animation Delays */
-.animation-delay-200 { animation-delay: 200ms; }
-.animation-delay-400 { animation-delay: 400ms; }
-.animation-delay-600 { animation-delay: 600ms; }

@@ -39,19 +39,23 @@ export default function FirstLastBook() {
             </>
           )}
         </h4>
-        <BookCoverCarousel books={[{ 
+        {firstBook && (
+          <BookCoverCarousel books={[{ 
             coverUrl: firstBook.coverUrl as string, 
             title: firstBook.title, 
             author: firstBook.author 
             }]} />
+        )}
         <h4>
           and <span className="text-secondary italic mr-1">ended</span> with
         </h4>
-        <BookCoverCarousel books={[{ 
+        {lastBook && (  
+          <BookCoverCarousel books={[{ 
             coverUrl: lastBook.coverUrl as string, 
             title: lastBook.title, 
             author: lastBook.author 
             }]} />
+        )}
       </div>
 
       <NavigationButtons />

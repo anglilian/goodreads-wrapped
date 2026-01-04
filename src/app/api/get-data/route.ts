@@ -4,6 +4,8 @@ import { readingData } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import { sql } from "drizzle-orm";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: Request) {
   try {
     // Add connection test

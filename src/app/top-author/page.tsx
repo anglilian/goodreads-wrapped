@@ -26,10 +26,10 @@ export default function TopAuthor() {
     const MIN_BOOK_COUNT = 2;
 
     const sortedAuthors = Object.entries(groupByAuthor).sort((a, b) => b[1].length - a[1].length);
-    const maxBookCount = sortedAuthors[0][1].length;
+    const maxBookCount = sortedAuthors.length > 0 ? sortedAuthors[0][1].length : 0;
     const filteredAuthors = sortedAuthors.filter((author) => author[1].length > MIN_BOOK_COUNT);
 
-    const topAuthors = filteredAuthors.filter((author) => author[1].length === Math.max(MIN_BOOK_COUNT, maxBookCount));
+    const topAuthors = filteredAuthors.length > 0 ? filteredAuthors.filter((author) => author[1].length === Math.max(MIN_BOOK_COUNT, maxBookCount)) : [];
     const topAuthorsName = topAuthors.map((author) => author[0]);
     const topAuthorsBooks = topAuthors.flatMap((author) => author[1]);
 

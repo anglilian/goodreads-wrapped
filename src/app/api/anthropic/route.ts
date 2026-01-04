@@ -28,7 +28,7 @@ export async function POST(request: Request) {
         },
       ],
       model: "claude-sonnet-4-5",
-      max_tokens: 500,
+      max_tokens: 1000,
     });
 
     // Get the response

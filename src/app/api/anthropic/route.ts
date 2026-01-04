@@ -32,7 +32,6 @@ export async function POST(request: Request) {
     });
 
     // Get the response
-    console.log("Anthropic response:", completion);
     const response = completion.content[0] as TextBlock;
     return NextResponse.json({ response: response.text });
   } catch (error: any) {

@@ -15,13 +15,9 @@ function getEnhancedCoverUrl(volumeInfo?: {
 
   const thumbnail = volumeInfo.imageLinks.thumbnail;
 
-  // Check if it's the default "no cover" image (575x750)
-
-  const img = new Image();
-  img.src = thumbnail;
-  if (img.width === 575 && img.height === 750) {
-    return undefined;
-  }
+  // The Image() constructor doesn't work in Node.js/server-side
+  // and checking dimensions synchronously won't work for remote images
+  // Remove the faulty check that was preventing valid covers from being returned
 
   return thumbnail
     .replace("http:", "https:")
@@ -64,6 +60,7 @@ export async function getBookDataByTitleAuthor(
   author: string
 ): Promise<{ isbn?: string; coverUrl?: string }> {
   try {
+    title = title.replace(/\s*\([^)]*\)/g, "").trim()
     const data = await fetchWithRetry(() =>
       fetchGoogleBooks(
         `intitle:${encodeURIComponent(title)}+inauthor:${encodeURIComponent(

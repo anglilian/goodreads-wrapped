@@ -120,17 +120,15 @@ Your output should be only completing the sentence: "You read a lot about" and t
           <h2 className="text-secondary italic">{genreAnalysis.genre}</h2>
         </div>
         {genreAnalysis.isbns.length > 0 && (
-          <div className="mt-2">
-            <BookCoverCarousel
-              books={booksThisYear
-                .filter((book) => genreAnalysis.isbns.includes(book.isbn))
-                .map((book) => ({
-                  coverUrl: book.coverUrl as string,
-                  title: book.title,
-                  author: book.author,
-                }))}
-            />
-          </div>
+          <BookCoverCarousel
+            books={booksThisYear
+              .filter((book) => genreAnalysis.isbns.includes(book.isbn))
+              .map((book) => ({
+                coverUrl: book.coverUrl as string,
+                title: book.title,
+                author: book.author,
+              }))}
+          />
         )}
         <h5>
           A whopping 

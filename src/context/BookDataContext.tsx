@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useState, ReactNode } from "react";
 import { BookDataContextType, Book, RawBook } from "@/types/books";
-import { useGoogleBooksAPI } from "@/hooks/useGoogleBooksAPI";
+import { getBookDataByTitleAuthor, useGoogleBooksAPI } from "@/hooks/useGoogleBooksAPI";
 import { useOpenLibraryAPI } from "@/hooks/useOpenLibraryAPI";
 import { getGoodreadsYear } from "@/utils/getGoodreadsYear";
 
@@ -121,6 +121,20 @@ export function BookDataProvider({
           }
         })(),
       ]);
+
+      // Process books for this year without covers through Google Books
+      await (async () => {
+        const booksWithoutCovers = allProcessedBooks.filter((book) => !book.coverUrl && book.dateRead.getFullYear() === currentYear);
+
+        const coverPromises = booksWithoutCovers.map(async (book) => {
+          const data = await getBookDataByTitleAuthor(book.title, book.author);
+          if (data.coverUrl) {
+            book.coverUrl = data.coverUrl;
+          }
+        });
+
+        await Promise.all(coverPromises);
+      }) ();
 
       // Store all books
       setBooks(allProcessedBooks);

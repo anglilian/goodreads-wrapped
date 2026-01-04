@@ -36,10 +36,10 @@ Based on the above list of books, complete the sentence below using no more than
 
 Then, determine all the books in the list which are in this genre. Extract the ISBN.
 
-Your output should be online completing the sentence: "You read a lot about" and the list of ISBN from books in the list and in this genre with a line break between each ISBN.
+Your output should be only completing the sentence: "You read a lot about" and the list of ISBN from books in the list and in this genre with a line break between each ISBN.
 `;
 
-      const response = await fetch("/api/openai", {
+      const response = await fetch("/api/anthropic", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

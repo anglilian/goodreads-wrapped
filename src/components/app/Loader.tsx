@@ -27,7 +27,7 @@ export default function Loader({ customText }: LoaderProps) {
     const intervalId = setInterval(() => {
       const randomIndex = Math.floor(Math.random() * loadingTexts.length);
       setTextIndex(randomIndex);
-    }, 5000);
+    }, 1500);
 
     return () => clearInterval(intervalId);
   }, [customText, loadingTexts.length]);

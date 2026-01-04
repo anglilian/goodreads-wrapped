@@ -5,9 +5,8 @@ import NavigationButtons from "@/components/ui/NavigationWrapper";
 import { useBookData } from "@/hooks/useBookData";
 
 export default function StartPage() {
-  const currentYear = new Date().getFullYear();
   const router = useRouter();
-  const { clearBooks, sharedBy } = useBookData();
+  const { clearBooks, sharedBy, goodreadsYear } = useBookData();
 
   const handleStart = async () => {
     await router.push("/books-read");
@@ -22,7 +21,7 @@ export default function StartPage() {
     <div className="page-container bg-background/90">
       <div className="flex flex-col items-center justify-center text-center gap-1">
         <h3>{sharedBy ? `${sharedBy}'s` : "Your"}</h3>
-        <h1>{currentYear}</h1>
+        <h1>{goodreadsYear}</h1>
         <h3> in books</h3>
       </div>
 

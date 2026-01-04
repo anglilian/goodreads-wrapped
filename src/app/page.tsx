@@ -11,7 +11,6 @@ import { mockBooks, mockGenreAnalysis } from "@/tests/testData";
 import HelpModal from "@/components/app/HelpModal";
 
 function WelcomePageContent() {
-  const currentYear = new Date().getFullYear();
   const {
     books,
     isLoading,
@@ -19,6 +18,7 @@ function WelcomePageContent() {
     loadSharedData,
     setGenreAnalysis,
     clearBooks,
+    goodreadsYear,
   } = useBookData();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,7 +46,7 @@ function WelcomePageContent() {
     <main>
       <div className="flex-1 flex flex-col items-center justify-center min-h-[100dvh] gap-y-2">
         <div className="text-center space-y-2 mb-8">
-          <h1>{currentYear}</h1>
+          <h1>{goodreadsYear}</h1>
           <h3>Goodreads Wrapped</h3>
         </div>
 

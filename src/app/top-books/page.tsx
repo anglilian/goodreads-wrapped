@@ -7,10 +7,9 @@ import EmojiButton from "@/components/ui/EmojiButton";
 import { redirect } from "next/navigation";
 
 export default function TopBooks() {
-  const { books, sharedBy } = useBookData();
-  const currentYear = new Date().getFullYear();
+  const { books, sharedBy, goodreadsYear } = useBookData();
   const booksThisYear = books.filter(
-    (book) => book.dateRead.getFullYear() === currentYear
+    (book) => book.dateRead.getFullYear() === goodreadsYear
   );
 
   const fiveStarBooks = booksThisYear

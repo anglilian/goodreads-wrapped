@@ -4,13 +4,12 @@ import { useBookData } from "@/hooks/useBookData";
 import NavigationButtons from "@/components/ui/NavigationWrapper";
 
 export default function BooksRead() {
-  const { books, sharedBy } = useBookData();
-  const currentYear = new Date().getFullYear();
-  const previousYear = currentYear - 1;
+  const { books, sharedBy, goodreadsYear } = useBookData();
+  const previousYear = goodreadsYear - 1;
 
   // Filter for current year's books
   const thisYearBooks = books.filter(
-    (book) => book.dateRead.getFullYear() === currentYear
+    (book) => book.dateRead.getFullYear() === goodreadsYear
   );
 
   const thisYearBookCount = thisYearBooks.length;

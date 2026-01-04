@@ -1,9 +1,13 @@
+import { useBookData } from "@/hooks/useBookData";
+
 interface NoDataModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
 export default function NoDataModal({ isOpen, onClose }: NoDataModalProps) {
+  const { goodreadsYear } = useBookData();
+  
   if (!isOpen) return null;
 
   return (
@@ -23,10 +27,10 @@ export default function NoDataModal({ isOpen, onClose }: NoDataModalProps) {
         </button>
         <h5 className="font-bold mb-4">No books this year?</h5>
         <p className="mb-4">
-          We couldn't find any books read in {new Date().getFullYear()}. You can
+          We couldn't find any books read in {goodreadsYear}. You can
           easily <a href="https://www.goodreads.com/review/list">add books</a>{" "}
           to this list by setting 'Date Read' for each book to any time in{" "}
-          {new Date().getFullYear()}.
+          {goodreadsYear}.
         </p>
       </div>
     </div>

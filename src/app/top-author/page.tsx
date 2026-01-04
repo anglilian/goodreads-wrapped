@@ -8,10 +8,9 @@ import { Book } from "@/types/books";
 import FadingAuthorNames from "@/components/top-author/FadingAuthorNames";
 
 export default function TopAuthor() {
-  const { books, sharedBy } = useBookData();
-  const currentYear = new Date().getFullYear();
+  const { books, sharedBy, goodreadsYear } = useBookData();
   const booksThisYear = books.filter(
-    (book) => book.dateRead.getFullYear() === currentYear
+    (book) => book.dateRead.getFullYear() === goodreadsYear
   );
 
   const groupByAuthor = booksThisYear

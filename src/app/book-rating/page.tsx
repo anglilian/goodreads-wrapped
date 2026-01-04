@@ -8,10 +8,9 @@ import { useEffect } from "react";
 
 export default function BookRating() {
   const router = useRouter();
-  const { books, sharedBy } = useBookData();
-  const currentYear = new Date().getFullYear();
+  const { books, sharedBy, goodreadsYear } = useBookData();
   const thisYearBooks = books.filter(
-    (book) => book.dateRead?.getFullYear() === currentYear && book.rating
+    (book) => book.dateRead?.getFullYear() === goodreadsYear && book.rating
   );
 
   // Add this effect to handle navigation

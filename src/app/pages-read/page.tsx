@@ -6,13 +6,12 @@ import BookStack from "@/components/pages-read/BookStack";
 import EmojiButton from "@/components/ui/EmojiButton";
 
 export default function PagesRead() {
-  const { books, sharedBy } = useBookData();
-  const currentYear = new Date().getFullYear();
-  const lastYear = currentYear - 1;
+  const { books, sharedBy, goodreadsYear } = useBookData();
+  const lastYear = goodreadsYear - 1;
 
   // Filter books by year
   const thisYearBooks = books.filter(
-    (book) => book.dateRead.getFullYear() === currentYear
+    (book) => book.dateRead.getFullYear() === goodreadsYear
   );
   const lastYearBooks = books.filter(
     (book) => book.dateRead.getFullYear() === lastYear
@@ -60,7 +59,7 @@ export default function PagesRead() {
         </div>
 
         <div className="flex flex-col items-center">
-          <h2>{currentYear}</h2>
+          <h2>{goodreadsYear}</h2>
           <BookStack books={thisYearBooks} maxPages={maxPages} />
         </div>
 

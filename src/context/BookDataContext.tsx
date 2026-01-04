@@ -3,6 +3,7 @@ import { createContext, useState, ReactNode } from "react";
 import { BookDataContextType, Book, RawBook } from "@/types/books";
 import { useGoogleBooksAPI } from "@/hooks/useGoogleBooksAPI";
 import { useOpenLibraryAPI } from "@/hooks/useOpenLibraryAPI";
+import { getGoodreadsYear } from "@/utils/getGoodreadsYear";
 
 export const BookDataContext = createContext<BookDataContextType | undefined>(
   undefined
@@ -12,7 +13,7 @@ const cleanISBN = (isbn: string): string => {
   return isbn.replace(/^=?"?|"?$/g, "").trim();
 };
 
-const currentYear = new Date().getFullYear();
+const currentYear = getGoodreadsYear();
 
 export function BookDataProvider({
   children,
@@ -186,6 +187,7 @@ export function BookDataProvider({
     setGenreAnalysis,
     loadSharedData,
     sharedBy,
+    goodreadsYear: currentYear,
   };
 
   return (

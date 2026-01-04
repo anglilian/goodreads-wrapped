@@ -9,16 +9,15 @@ import NavigationButtons from "@/components/ui/NavigationWrapper";
 import { parseGenreResponse } from "@/utils/parseGenreResponse";
 
 export default function TopGenre() {
-  const { books, genreAnalysis, setGenreAnalysis, sharedBy } = useBookData();
+  const { books, genreAnalysis, setGenreAnalysis, sharedBy, goodreadsYear } = useBookData();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>("");
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
-  const currentYear = new Date().getFullYear();
 
   // Filter books for current year
   const booksThisYear = books.filter(
-    (book) => book.dateRead.getFullYear() === currentYear
+    (book) => book.dateRead.getFullYear() === goodreadsYear
   );
 
   // Function to fetch and analyze genre data

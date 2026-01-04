@@ -10,7 +10,7 @@ import { StatsCard } from "@/components/summary/StatsCard";
 import { ActionButton } from "@/components/summary/ActionButton";
 
 export default function Summary() {
-  const { books, genreAnalysis, sharedBy, clearBooks } = useBookData();
+  const { books, genreAnalysis, sharedBy, clearBooks, goodreadsYear } = useBookData();
   const router = useRouter();
   const [showConfetti, setShowConfetti] = useState(true);
   const [showShareModal, setShowShareModal] = useState(false);
@@ -35,11 +35,9 @@ export default function Summary() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const currentYear = new Date().getFullYear();
-
   // Derived state calculations
   const thisYearBooks = books.filter(
-    (book) => book.dateRead.getFullYear() === currentYear
+    (book) => book.dateRead.getFullYear() === goodreadsYear
   );
 
   const totalPages = thisYearBooks.reduce(
@@ -73,7 +71,7 @@ export default function Summary() {
       <div className="flex flex-col gap-4 items-center justify-center text-center bg-background p-8 rounded-md">
         <header className="text-center space-y-2">
           <h3>{sharedBy ? `${sharedBy}'s` : "That's a wrap for"}</h3>
-          <h1>{currentYear}</h1>
+          <h1>{goodreadsYear}</h1>
         </header>
 
         {/* Stats Grid */}

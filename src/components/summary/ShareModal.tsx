@@ -13,14 +13,13 @@ export default function ShareModal({ isOpen, onClose }: ShareModalProps) {
   const [error, setError] = useState<string | null>(null);
   const [shareableLink, setShareableLink] = useState<string | null>(null);
   const [copySuccess, setCopySuccess] = useState(false);
-  const { books, genreAnalysis } = useBookData();
-  const currentYear = new Date().getFullYear();
+  const { books, genreAnalysis, goodreadsYear } = useBookData();
   const booksThisYear = books.filter(
-    (book) => book.dateRead.getFullYear() === currentYear
+    (book) => book.dateRead.getFullYear() === goodreadsYear
   );
 
   const getShareMessage = (link: string) => {
-    return `📚 Check out my ${currentYear} in books! I read ${booksThisYear.length} books this year.\n\n${link}`;
+    return `📚 Check out my ${goodreadsYear} in books! I read ${booksThisYear.length} books this year.\n\n${link}`;
   };
 
   const handleSave = async () => {

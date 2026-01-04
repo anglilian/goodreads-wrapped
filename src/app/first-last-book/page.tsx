@@ -5,12 +5,11 @@ import NavigationButtons from "@/components/ui/NavigationWrapper";
 import BookCoverCarousel from "@/components/top-books/BookCoverCarousel";
 
 export default function FirstLastBook() {
-  const { books, sharedBy } = useBookData();
-  const currentYear = new Date().getFullYear();
+  const { books, sharedBy, goodreadsYear } = useBookData();
 
   // Filter books by year
   const thisYearBooks = books.filter(
-    (book) => book.dateRead.getFullYear() === currentYear
+    (book) => book.dateRead.getFullYear() === goodreadsYear
   );
 
   thisYearBooks.sort((a, b) => a.dateRead.getTime() - b.dateRead.getTime());
@@ -31,11 +30,11 @@ export default function FirstLastBook() {
         <h4>
           {sharedBy ? (
             <>
-              {sharedBy} <span className="text-secondary italic mr-1">started </span> {currentYear} with
+              {sharedBy} <span className="text-secondary italic mr-1">started </span> {goodreadsYear} with
             </>
           ) : (
             <>
-              You <span className="text-secondary italic mr-1">started </span> {currentYear} with
+              You <span className="text-secondary italic mr-1">started </span> {goodreadsYear} with
             </>
           )}
         </h4>

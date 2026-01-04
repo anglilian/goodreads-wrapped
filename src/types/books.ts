@@ -34,4 +34,5 @@ export interface BookDataContextType {
   ) => void;
   loadSharedData: (readerId: string) => Promise<void>;
   sharedBy: string | null;
+  goodreadsYear: number;
 }
